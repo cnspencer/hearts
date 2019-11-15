@@ -1,0 +1,68 @@
+Requirements and planning for the Hearts game itself
+-------------------------------------------------------------
+GUI components
+	###need images for cards (backside)
+
+
+Hearts
+	loads up PlayerWindow and once player has put in IPs,
+	loads up GameWindow with round #n information
+
+
+Round
+	Round()
+		shuffles the deck and deals
+	tradeCards()
+		depending on the round number, has the user choose 3 cards to give to the designated player
+
+Player
+	Player()
+		sets ip, or assigns a "bot" to handle the playing logic for an empty ip
+	addCard()
+		adds a card to the player's hand
+	removeCard()
+		removes the card object from the hand array
+	getIP()
+		returns the IP
+	isBot()
+		returns if the player is or is not a bot
+	getHand()
+		returns the array of cards
+	getCard()
+		returns a card from a specific index
+
+Deck
+	Deck()
+		generates a normal deck of cards
+	shuffle()
+		shuffles the cards
+	deal()
+		gives the appropriate amount of cards and returns the player who has the Two of Clubs to start
+	getDeckSize()
+		returns how many cards are left to deal
+	getCards()
+		Returns the amount of cards that the deck began with
+
+Card
+	Card(cardNum, cardType)
+		cardNum (Ace-King)
+		cardType (Heart/Club/Spade/Diamond)
+		value (Numerical value)
+		image (link to the image)
+	getCardNum()
+		returns cardNum
+	getCardType()
+		returns cardType
+	getValue()
+		returns value
+	getSuit()
+		returns the suit
+	getNumber()
+		returns the layman number (ace, two, etc.)
+	no setters
+	toString()
+		prints Number of Suit (e.g. "Queen of Spades")
+	showBack()
+		returns image of the back of the card
+	showFront()
+		returns the image of the card
