@@ -6,7 +6,7 @@
 <?import javafx.scene.control.Button?>
 <Pane prefHeight="480.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Hearts">
     <children>
-    <Label fx:id="InstructionText" alignment="CENTER" contentDisplay="CENTER" layoutX="525.0" layoutY="55.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="90.0" prefWidth="178.0" text="Welcome to Hearts! Cards are being dealt." textAlignment="CENTER" wrapText="true">
+    <Label fx:id="InstructionText" alignment="CENTER" contentDisplay="CENTER" layoutX="525.0" layoutY="55.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="90.0" prefWidth="178.0" text="Welcome to Hearts! Connecting to players..." textAlignment="CENTER" wrapText="true">
          <font><Font name="Lato Heavy" size="13.0" /></font>
         <Button text="End Turn" onAction="#submitTurn">
         </Button>

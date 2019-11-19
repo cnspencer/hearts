@@ -3,6 +3,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
@@ -18,37 +19,34 @@ import java.io.IOException;
 public class Hearts extends Application {
     private Round round;
     private int numRounds = 4;
-    private Player[] players = Player.Player[4];
+    private Player[] players = new Player[4];
+
     public void start(Stage st) {
-        Parent startLoader = null;
-        Parent gameLoader = null;
 
         Pane playerPn = this.getStartLoader();
-//        try {
-//            startLoader = FXMLLoader.load(getClass().getResource("PlayerMenu.fxml"));
-//        } catch (IOException ex) {
-//            System.out.print("Caught " + ex.toString() + "in startLoader");
-//        }
 
         Scene sc = new Scene(playerPn);
-        this.players[0] = new Player(((TextField)(playerPn.lookup("P1IP"))).getText());
-        this.players[1] = new Player(((TextField)(playerPn.lookup("P2IP"))).getText());
-        this.players[2] = new Player(((TextField)(playerPn.lookup("P3IP"))).getText());
-        this.players[3] = new Player(((TextField)(playerPn.lookup("P4IP"))).getText());
+
+        Pane gamePn = this.getGameLoader();
+        Scene mainSc = new Scene(gamePn);
+
+         playerPn.lookup("buttonPane").lookup("ipSubmit").setOnMouseClicked(e -> {
+             this.players[0] = new Player(((TextField)(playerPn.lookup("P1IP"))).getText());
+             this.players[1] = new Player(((TextField)(playerPn.lookup("P2IP"))).getText());
+             this.players[2] = new Player(((TextField)(playerPn.lookup("P3IP"))).getText());
+             this.players[3] = new Player(((TextField)(playerPn.lookup("P4IP"))).getText());
+             st.setScene(mainSc);
+        });
+
+        st.setScene(sc);
+//        ((Label)gameLoader.lookup("InstructionText")).setText("");
+
+        //set scene with game pane
 
         for (int i = 0; i < numRounds; i++) {
             round = new Round(i, this.players);
         }
 
-        try {
-            gameLoader = FXMLLoader.load(getClass().getResource("GameWindow.fxml"));
-        } catch (IOException ex) {
-            System.out.print("Caught " + ex.toString() + "in gameLoader");
-        }
-
-        Scene mainSc = new Scene(gameLoader);
-        st.setScene(sc);
-        ((Label)gameLoader.lookup("InstructionText")).setText("");
         st.show();
     }
 
@@ -57,6 +55,16 @@ public class Hearts extends Application {
             return FXMLLoader.load(getClass().getResource("PlayerMenu.fxml"));
         } catch (IOException ex) {
             System.out.print("Caught " + ex.toString() + "in getStartLoader()");
+        } finally {
+            return new Pane();
+        }
+    }
+
+    private Pane getGameLoader() {
+        try {
+            return FXMLLoader.load(getClass().getResource("GameWindow.fxml"));
+        } catch (IOException ex) {
+            System.out.print("Caught " + ex.toString() + "in getGameLoader");
         }
         return new Pane();
     }
