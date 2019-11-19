@@ -1,12 +1,10 @@
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.io.IOException;
 
@@ -24,13 +22,11 @@ public class Hearts extends Application {
     public void start(Stage st) {
 
         Pane playerPn = this.getStartLoader();
-
         Scene sc = new Scene(playerPn);
-
         Pane gamePn = this.getGameLoader();
         Scene mainSc = new Scene(gamePn);
 
-         playerPn.lookup("buttonPane").lookup("ipSubmit").setOnMouseClicked(e -> {
+        playerPn.lookup("buttonPane").lookup("ipSubmit").setOnMouseClicked(e -> {
              this.players[0] = new Player(((TextField)(playerPn.lookup("P1IP"))).getText());
              this.players[1] = new Player(((TextField)(playerPn.lookup("P2IP"))).getText());
              this.players[2] = new Player(((TextField)(playerPn.lookup("P3IP"))).getText());
@@ -52,19 +48,18 @@ public class Hearts extends Application {
 
     private Pane getStartLoader() {
         try {
-            return FXMLLoader.load(getClass().getResource("PlayerMenu.fxml"));
+            return (VBox)FXMLLoader.load(getClass().getResource("PlayerMenu.fxml"));
         } catch (IOException ex) {
-            System.out.print("Caught " + ex.toString() + "in getStartLoader()");
-        } finally {
-            return new Pane();
+            System.out.println("Caught " + ex.toString() + "in getStartLoader()");
         }
+        return new Pane();
     }
 
     private Pane getGameLoader() {
         try {
             return FXMLLoader.load(getClass().getResource("GameWindow.fxml"));
         } catch (IOException ex) {
-            System.out.print("Caught " + ex.toString() + "in getGameLoader");
+            System.out.println("Caught " + ex.toString() + "in getGameLoader");
         }
         return new Pane();
     }
@@ -73,6 +68,9 @@ public class Hearts extends Application {
     }
 
     @FXML private void submitTurn() {
+    }
+
+    @FXML private void setp1IP() {
     }
 
     public static void main(String[] args) {
