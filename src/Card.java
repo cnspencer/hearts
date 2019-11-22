@@ -14,6 +14,8 @@ public class Card {
     Card(Numbers cardNum, Suits cardType) {
         this.cardNum = cardNum;
         this.cardType = cardType;
+        this.value = cardNum.ordinal();
+        this.image = new Image("GameData/" + this.cardNum.toString().toUpperCase() + "of" + this.cardType.toString().toUpperCase() + ".jpg");
         switch (cardNum) {
             case ACE:
                 this.value = 14;
@@ -62,6 +64,17 @@ public class Card {
 
     public Numbers getNumber() {
         return this.cardNum;
+    }
+
+    public int getScore() {
+        if (this.cardNum.equals(Numbers.QUEEN)) {
+            if (this.cardType.equals(Suits.SPADES)) {
+                return 13;
+            }
+        } else if (this.cardType.equals(Suits.HEARTS)) {
+            return 1;
+        }
+        return 0;
     }
 
     @Override

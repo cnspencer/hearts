@@ -1,10 +1,17 @@
 import javafx.application.Application;
+import javafx.beans.property.BooleanProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Ellipse;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.TriangleMesh;
 import javafx.stage.Stage;
 import java.io.IOException;
 
@@ -15,44 +22,64 @@ import java.io.IOException;
  */
 
 public class Hearts extends Application {
+    @FXML protected VBox buttonPane;
+    @FXML protected Button ipSubmit;
+    @FXML protected TextField p1IP;
+    @FXML protected TextField p2IP;
+    @FXML protected TextField p3IP;
+    @FXML protected TextField p4IP;
+    @FXML protected CheckBox p1Bot;
+    @FXML protected CheckBox p2Bot;
+    @FXML protected CheckBox p3Bot;
+    @FXML protected CheckBox p4Bot;
+    private Stage st;
+    private Scene mainSc;
     private Round round;
     private int numRounds = 4;
     private Player[] players = new Player[4];
 
     public void start(Stage st) {
-
-        Pane playerPn = this.getStartLoader();
-        Scene sc = new Scene(playerPn);
+        this.st = st;
+        VBox playerPn = getStartLoader();
+        Scene ipSc = new Scene(playerPn);
+        this.st.setScene(ipSc);
         Pane gamePn = this.getGameLoader();
-        Scene mainSc = new Scene(gamePn);
+        this.mainSc = new Scene(gamePn);
 
-        playerPn.lookup("buttonPane").lookup("ipSubmit").setOnMouseClicked(e -> {
-             this.players[0] = new Player(((TextField)(playerPn.lookup("P1IP"))).getText());
-             this.players[1] = new Player(((TextField)(playerPn.lookup("P2IP"))).getText());
-             this.players[2] = new Player(((TextField)(playerPn.lookup("P3IP"))).getText());
-             this.players[3] = new Player(((TextField)(playerPn.lookup("P4IP"))).getText());
-             st.setScene(mainSc);
-        });
-
-        st.setScene(sc);
-//        ((Label)gameLoader.lookup("InstructionText")).setText("");
-
-        //set scene with game pane
 
         for (int i = 0; i < numRounds; i++) {
             round = new Round(i, this.players);
         }
 
-        st.show();
+        Scene resultSc = new Scene(this.getResults(), 400, 400);
+        this.st.setScene(resultSc);
+
+        this.st.show();
     }
 
-    private Pane getStartLoader() {
+    public void p1Bind() {
+        this.p1IP.editableProperty().isNotEqualTo(this.p1Bot.selectedProperty());
+    }
+
+    public void p2Bind() {
+        this.p2IP.editableProperty().isNotEqualTo(this.p2Bot.selectedProperty());
+    }
+
+    public void p3Bind() {
+        this.p3IP.editableProperty().isNotEqualTo(this.p3Bot.selectedProperty());
+    }
+
+    public void p4Bind() {
+        this.p4IP.editableProperty().isNotEqualTo(this.p4Bot.selectedProperty());
+    }
+
+    private VBox getStartLoader() {
         try {
             return (VBox)FXMLLoader.load(getClass().getResource("PlayerMenu.fxml"));
         } catch (IOException ex) {
             System.out.println("Caught " + ex.toString() + "in getStartLoader()");
         }
-        return new Pane();
+        return new VBox();
     }
 
     private Pane getGameLoader() {
@@ -64,13 +91,44 @@ public class Hearts extends Application {
         return new Pane();
     }
 
+    private Pane getResults() {
+        VBox win = new VBox();
+
+        //Add 3D heart
+        Pane heart = new Pane();
+        heart.getChildren().add(new Ellipse(121, 70, 30, 50));
+        heart.getChildren().add(new Ellipse(239, 70, 30, 50));
+        heart.getChildren().add(new Line(252, 150, 121, 103));
+        heart.getChildren().add(new Line(252, 150, 209, 103));
+        win.getChildren().add(heart);
+
+        //Add player names and scores
+        for (int i = 0; i < this.players.length; i++) {
+            if (this.players[i++] != null) {
+                if (this.players[i].getScore() < this.players[i++].getScore()) {
+                    Player temp = this.players[i];
+                    this.players[i] = this.players[i++];
+                    this.players[i++] = temp;
+                }
+            }
+        }
+        for (int i = 0; i < this.players.length; i++) {
+            win.getChildren().add(new Label("Player " + i + " : " + this.players[i].getScore()));
+        }
+        return win;
+    }
+
     @FXML private void setIPs() {
+        this.ipSubmit.setOnMouseClicked(e -> {
+            this.players[0] = new Player(this.p1IP.getText());
+            this.players[1] = new Player(this.p2IP.getText());
+            this.players[2] = new Player(this.p3IP.getText());
+            this.players[3] = new Player(this.p4IP.getText());
+            this.st.setScene(this.mainSc);
+        });
     }
 
     @FXML private void submitTurn() {
-    }
-
-    @FXML private void setp1IP() {
     }
 
     public static void main(String[] args) {

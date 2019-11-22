@@ -13,6 +13,8 @@ public class Round {
         this.players = players;
         deck.shuffle();
         for (int i = 0; i < deck.getCards(); i++) {
+            System.out.println(this.players.length);
+            System.out.println(i);
             this.players[Math.floorMod(i, this.players.length)].addCard(this.deck.dealCard(), i);
         }
         tradeCards(round);

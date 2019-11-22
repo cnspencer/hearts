@@ -1,7 +1,7 @@
 Requirements and planning for the Hearts game itself
 -------------------------------------------------------------
 GUI components
-	###need images for cards (backside)
+	###need image for cards (backside)
 
 
 Hearts

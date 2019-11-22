@@ -7,13 +7,10 @@ public class Player {
     private Card[] hand = new Card[13];
     private String ip;
     private boolean isBot;
+    private int score = 0;
     Player(String ip) {
         this.ip = ip;
-        if (this.ip.equalsIgnoreCase("") || this.ip.equalsIgnoreCase("bot")) {
-            this.isBot = true;
-        } else {
-            this.isBot = false;
-        }
+        this.isBot = this.ip.equalsIgnoreCase("");
     }
 
     public void addCard(Card card, int deal) {
@@ -26,6 +23,10 @@ public class Player {
 
     public String getIP() {
         return this.ip;
+    }
+
+    public int getScore() {
+        return this.score;
     }
 
     public Card[] getHand() {
@@ -42,5 +43,9 @@ public class Player {
                 this.hand[i] = null;
             }
         }
+    }
+
+    public void addScore(int points) {
+        this.score =+ points;
     }
 }

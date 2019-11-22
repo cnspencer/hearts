@@ -7,30 +7,40 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.CheckBox?>
 
-<VBox prefHeight="480.0" prefWidth="720.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Hearts">
+<VBox prefHeight="480.0" prefWidth="720.0" xmlns:fx="http://javafx.com/fxml" fx:controller="Hearts" background="Light">
+    <fx:define>
+        <TextField fx:id="p1IP"></TextField>
+        <TextField fx:id="p2IP"></TextField>
+        <TextField fx:id="p3IP"></TextField>
+        <TextField fx:id="p4IP"></TextField>
+        <CheckBox fx:id="p1Bot" onAction="#p1Bind"></CheckBox>
+        <CheckBox fx:id="p2Bot" onAction="#p2Bind"></CheckBox>
+        <CheckBox fx:id="p3Bot" onAction="#p3Bind"></CheckBox>
+        <CheckBox fx:id="p4Bot" onAction="#p4Bind"></CheckBox>
+    </fx:define>
     <HBox prefHeight="480.0" prefWidth="480.0">
         <VBox>
-            <TextField> promptText="IP of player #1" fx:id="P1IP" padding="20" alignment="CENTER" onAction="#setp1IP"</TextField>
-            <Label> text="Player 1 IP (self)" padding="20"</Label>
-            <CheckBox> fx:id="P1Bot" text="Bot"</CheckBox>
+            <fx:reference source="p1IP" promptText="IP of player #1" padding="20" alignment="CENTER"/>
+            <Label text="Player 1 IP (self)" padding="20"></Label>
+            <fx:reference source="p1Bot" text="Bot"/>
         </VBox>
         <VBox>
-            <TextField> editable="true" promptText="IP of player #2" fx:id="P2IP" padding="20" alignment="CENTER"</TextField>
-            <Label> text="Player 2 IP" padding="20"</Label>
-            <CheckBox> fx:id="P2Bot" text="Bot"</CheckBox>
+            <fx:reference source="p2IP" promptText="IP of player #1" padding="20" alignment="CENTER"/>
+            <Label text="Player 2 IP" padding="20"></Label>
+            <fx:reference source="p2Bot" text="Bot"/>
         </VBox>
         <VBox>
-            <TextField> editable="true" promptText="IP of player #3" fx:id="P3IP" padding="20" alignment="CENTER"</TextField>
-            <Label> text="Player 3 IP" padding="20"</Label>
-            <CheckBox> fx:id="P3Bot" text="Bot"</CheckBox>
+            <fx:reference source="p3IP" promptText="IP of player #1" padding="20" alignment="CENTER"/>
+            <Label text="Player 3 IP" padding="20"></Label>
+            <fx:reference source="p3Bot" text="Bot"/>
         </VBox>
         <VBox>
-            <TextField> editable="true" promptText="IP of player #4" fx:id="P4IP" padding="20" alignment="CENTER"</TextField>
-            <Label> text="Player 4 IP" padding="20"</Label>
-            <CheckBox> fx:id="P4Bot" text="Bot"</CheckBox>
+            <fx:reference source="p4IP" promptText="IP of player #1" padding="20" alignment="CENTER"/>
+            <Label text="Player 4 IP" padding="20"></Label>
+            <fx:reference source="p4Bot" text="Bot"/>
         </VBox>
     </HBox>
-    <VBox id="buttonPane">
-        <Button> id="ipSubmit" fx:id="ipSubmit" text="Submit" padding="20" alignment="CENTER" onMouseClicked="#setIPs"</Button>
+    <VBox fx:id="buttonPane">
+        <Button fx:id="ipSubmit" text="Submit" padding="20" alignment="CENTER" onMouseClicked="#setIPs"></Button>
     </VBox>
 </VBox>
