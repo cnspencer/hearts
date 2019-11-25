@@ -7,9 +7,11 @@ public class Deck {
     private Card[] cards = new Card[52];
     private int deckSize = cards.length;
     Deck() {
+        int count = 0;
         for (Suits i : Suits.values()) {
             for (Numbers j : Numbers.values()) {
-                this.cards[i.ordinal() * j.ordinal()] = new Card(j, i);
+                this.cards[count] = new Card(j, i);
+                count++;
             }
         }
     }
@@ -25,7 +27,11 @@ public class Deck {
 
     public Card dealCard() {
         this.deckSize--;
-        return this.cards[this.deckSize];
+        if (this.deckSize > -1) {
+            return this.cards[this.deckSize];
+        } else {
+            return this.cards[this.deckSize++];
+        }
     }
 
     public int getDeckSize() {

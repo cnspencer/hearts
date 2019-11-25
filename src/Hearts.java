@@ -36,43 +36,16 @@ public class Hearts extends Application {
     private Scene mainSc;
     private Round round;
     private int numRounds = 4;
-    private Player[] players = new Player[4];
+    private Player[] players = {new Player(""), new Player(""), new Player(""), new Player("")};
 
     public void start(Stage st) {
         this.st = st;
-        VBox playerPn = getStartLoader();
-        Scene ipSc = new Scene(playerPn);
-        this.st.setScene(ipSc);
-        Pane gamePn = this.getGameLoader();
-        this.mainSc = new Scene(gamePn);
-
-
-        for (int i = 0; i < numRounds; i++) {
-            round = new Round(i, this.players);
-        }
-
-        Scene resultSc = new Scene(this.getResults(), 400, 400);
-        this.st.setScene(resultSc);
-
+        this.st.setScene(new Scene(getStartLoader()));
         this.st.show();
     }
 
-    public void p1Bind() {
-        this.p1IP.editableProperty().isNotEqualTo(this.p1Bot.selectedProperty());
-    }
 
-    public void p2Bind() {
-        this.p2IP.editableProperty().isNotEqualTo(this.p2Bot.selectedProperty());
-    }
-
-    public void p3Bind() {
-        this.p3IP.editableProperty().isNotEqualTo(this.p3Bot.selectedProperty());
-    }
-
-    public void p4Bind() {
-        this.p4IP.editableProperty().isNotEqualTo(this.p4Bot.selectedProperty());
-    }
-
+    //Loaders
     private VBox getStartLoader() {
         try {
             return (VBox)FXMLLoader.load(getClass().getResource("PlayerMenu.fxml"));
@@ -104,6 +77,7 @@ public class Hearts extends Application {
 
         //Add player names and scores
         for (int i = 0; i < this.players.length; i++) {
+            System.out.println(this.players[i++] != null);
             if (this.players[i++] != null) {
                 if (this.players[i].getScore() < this.players[i++].getScore()) {
                     Player temp = this.players[i];
@@ -118,6 +92,17 @@ public class Hearts extends Application {
         return win;
     }
 
+    private void initiateGame() {
+        for (int i = 0; i < this.numRounds; i++) {
+            this.round = new Round(i, this.players);
+        }
+//        Scene resultSc = new Scene(this.getResults(), 400, 400);
+//        this.st.setScene(resultSc);
+//        this.st.show();
+    }
+
+
+    //Action methods for PlayerMenu
     @FXML private void setIPs() {
         this.ipSubmit.setOnMouseClicked(e -> {
             this.players[0] = new Player(this.p1IP.getText());
@@ -126,10 +111,34 @@ public class Hearts extends Application {
             this.players[3] = new Player(this.p4IP.getText());
             this.st.setScene(this.mainSc);
         });
+        this.initiateGame();
+
+        Pane gamePn = this.getGameLoader();
+        this.mainSc = new Scene(gamePn);
+        this.st.show();
     }
 
+    public void p1Bind() {
+        this.p1IP.editableProperty().isNotEqualTo(this.p1Bot.selectedProperty());
+    }
+
+    public void p2Bind() {
+        this.p2IP.editableProperty().isNotEqualTo(this.p2Bot.selectedProperty());
+    }
+
+    public void p3Bind() {
+        this.p3IP.editableProperty().isNotEqualTo(this.p3Bot.selectedProperty());
+    }
+
+    public void p4Bind() {
+        this.p4IP.editableProperty().isNotEqualTo(this.p4Bot.selectedProperty());
+    }
+
+
+    //Action methods for GameWindow
     @FXML private void submitTurn() {
     }
+
 
     public static void main(String[] args) {
         launch(args);

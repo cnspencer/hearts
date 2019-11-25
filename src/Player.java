@@ -8,9 +8,10 @@ public class Player {
     private String ip;
     private boolean isBot;
     private int score = 0;
+
     Player(String ip) {
         this.ip = ip;
-        this.isBot = this.ip.equalsIgnoreCase("");
+        this.isBot = this.ip.equalsIgnoreCase("") || this.ip == null;
     }
 
     public void addCard(Card card, int deal) {
@@ -43,6 +44,10 @@ public class Player {
                 this.hand[i] = null;
             }
         }
+    }
+
+    public String toString() {
+        return this.ip;
     }
 
     public void addScore(int points) {
