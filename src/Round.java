@@ -14,7 +14,9 @@ public class Round {
         this.deck = new Deck();
         deck.shuffle();
         for (int i = 0; i < deck.getCards(); i++) {
-            System.out.println("Giving " + this.deck.dealCard() + " to " + this.players[i] + " on iteration " + i);
+            if (i >= 13) {
+                break;
+            }
             this.players[Math.floorMod(i, this.players.length)].addCard(this.deck.dealCard(), i);
         }
         tradeCards(round);

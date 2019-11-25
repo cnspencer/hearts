@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Ellipse;
@@ -40,7 +41,9 @@ public class Hearts extends Application {
 
     public void start(Stage st) {
         this.st = st;
-        this.st.setScene(new Scene(getStartLoader()));
+        this.st.setScene(new Scene(this.getStartLoader()));
+        this.st.setTitle("Choose Players");
+        this.st.getIcons().add(new Image("GameData/icon.svg"));
         this.st.show();
     }
 
@@ -77,7 +80,6 @@ public class Hearts extends Application {
 
         //Add player names and scores
         for (int i = 0; i < this.players.length; i++) {
-            System.out.println(this.players[i++] != null);
             if (this.players[i++] != null) {
                 if (this.players[i].getScore() < this.players[i++].getScore()) {
                     Player temp = this.players[i];
@@ -96,9 +98,10 @@ public class Hearts extends Application {
         for (int i = 0; i < this.numRounds; i++) {
             this.round = new Round(i, this.players);
         }
-//        Scene resultSc = new Scene(this.getResults(), 400, 400);
-//        this.st.setScene(resultSc);
-//        this.st.show();
+        Stage st3 = new Stage();
+        st3.setScene(new Scene(this.getResults(), 400, 400));
+        st3.setTitle("Results");
+        st3.show();
     }
 
 
@@ -111,11 +114,11 @@ public class Hearts extends Application {
             this.players[3] = new Player(this.p4IP.getText());
             this.st.setScene(this.mainSc);
         });
+        Stage st2 = new Stage();
+        st2.setScene(new Scene(this.getGameLoader()));
+        st2.setTitle("Hearts Game");
+        st2.show();
         this.initiateGame();
-
-        Pane gamePn = this.getGameLoader();
-        this.mainSc = new Scene(gamePn);
-        this.st.show();
     }
 
     public void p1Bind() {
