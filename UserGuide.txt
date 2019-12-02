@@ -1,0 +1,41 @@
+How to get the Hearts Client
+	1. Download the "Game" folder from "github.com/cnspencer/hearts".
+
+How to Run the Game
+	1. Double-click on "CS2410-Hearts".
+		If that doesn't work, call Charisse at 5093088207.
+			If that doesn't work, well, there goes my grade.
+	2. The "Player Menu" should appear. Enter the server IP (#DEFAULTIPHERE for a dedicated server).
+	3. Enter your IP. Only one player needs to check the bots. Press "submit".
+		Players should coordinate to ensure no information is doubly sent as well as connecting to the server one at a time.
+	4. A new screen (called the "Game Window") should appear. The "Player Menu" can safely be closed if it is still opened.
+	5. At the beginning of each round, each player chooses 3 cards to trade from his or her hand. The person the chosen cards go to is given by the "Instruction Text" to the right, above the "Submit Turn" button.
+	6. When it is your turn, as designated by the "Instruction Text", click on a card to choose it. Press the "Submit Turn" button to confirm.
+		NOTE: DO NOT press the "Submit Turn" button until it is your turn. Doing so will probably mess up the game and it may become unable to complete.
+	7. After 4 rounds, the game is finished. The "Results Window" will display the players in order of score (where low is good).
+	8. Close the windows. Connection to the server was terminated at the end of the game.
+
+Hearts Game Rules
+	Passing Cards at the Beginning of the Round
+		1. Round #1: each player passes 3 cards to the player to his or her left
+		2. Round #2: each player passes 3 cards to the player directly across from him or her
+		3. Round #3: each player passes 3 cards to the player to his or her right
+		4. Round #4: each player plays with the cards he or she is dealt; no card passing
+	Starting the Game
+		1. The player with the Two of Clubs must play the Two of Clubs to begin the game.
+	Per turn
+		1. On a player's turn, he or she selects a card to play.
+		2. If a player has a card of the suit first played, he or she is obliged to play a card of that suit.
+			If a player does not have a card of the suit first played, he or she may play a card of any suit.
+		3. When all players have put his or her card in, the hand goes to the player who played the highest card, as described in "Card Values".
+	Card Values
+		1. Cards with a number (i.e. not face cards or ace) are its own number.
+		2. Ace trumps King, which trumps Queen, which trumps Jack, which trumps 10, and so on.
+	Card Scores
+		1. Any card with the suit of Hearts is worth 1 point each.
+		2. The Queen of Spades is worth 13 points.
+	Shooting for the Moon
+		1. If a player gets all 26 points in a round, his or her score becomes 0, and the other players each gain 26 points.
+	Objective
+		1. The winner has the least amount of points.
+
