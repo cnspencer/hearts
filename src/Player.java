@@ -11,7 +11,7 @@ public class Player {
 
     Player(String ip) {
         this.ip = ip;
-        this.isBot = this.ip.equalsIgnoreCase("") || this.ip == null;
+        this.isBot = this.ip.equalsIgnoreCase("bot");
     }
 
     public void addCard(Card card, int deal) {

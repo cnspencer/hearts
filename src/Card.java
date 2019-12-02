@@ -15,7 +15,7 @@ public class Card {
         this.cardNum = cardNum;
         this.cardType = cardType;
         this.value = cardNum.ordinal();
-        this.image = new Image("GameData/" + this.cardNum.toString().toUpperCase() + "of" + this.cardType.toString().toUpperCase() + ".jpg");
+        this.image = new Image("GameData/" + this.cardNum.toString().toUpperCase() + "of" + this.cardType.toString().toUpperCase() + ".jpg", 100.1, 145.7, true, true, true);
         switch (cardNum) {
             case ACE:
                 this.value = 14;

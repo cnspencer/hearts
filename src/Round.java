@@ -1,3 +1,6 @@
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+
 /**
  * @author C. N. Spencer
  *
@@ -13,16 +16,28 @@ public class Round {
         this.players = players;
         this.deck = new Deck();
         deck.shuffle();
-        for (int i = 0; i < deck.getCards(); i++) {
+        this.dealCards();
+    }
+
+    private void dealCards() {
+        for (int i = 0; i < this.deck.getCards(); i++) {
             if (i >= 13) {
                 break;
             }
             this.players[Math.floorMod(i, this.players.length)].addCard(this.deck.dealCard(), i);
         }
-        tradeCards(round);
     }
 
-    private void tradeCards(int round) {
+    protected void displayPX(Pane pn, int player) {
+        for (int i = 0; i < this.players[player].getHand().length; i++) {
+            ImageView img = new ImageView(this.players[player].getCard(i).showFront());
+            pn.getChildren().add(img);
+//            img.setX();
+//            img.setY();
+        }
+    }
+
+    protected void tradeCards(int round) {
 
         switch (round) {
             case 1:
