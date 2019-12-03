@@ -1,3 +1,4 @@
+import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
@@ -11,9 +12,9 @@ public class Round {
     private int round = 0;
     private Player[] players;
 
-    Round(int round, Player[] players) {
+    Round(int round) {
         this.round = round;
-        this.players = players;
+//        this.players = players;
         this.deck = new Deck();
         deck.shuffle();
         this.dealCards();
@@ -28,13 +29,15 @@ public class Round {
         }
     }
 
-    protected void displayPX(Pane pn, int player) {
+    protected Node[] displayPX(int player) {
+        Node[] nodeList = new Node[4]
         for (int i = 0; i < this.players[player].getHand().length; i++) {
             ImageView img = new ImageView(this.players[player].getCard(i).showFront());
-            pn.getChildren().add(img);
+            nodeList[i] = img;
 //            img.setX();
 //            img.setY();
         }
+        return nodeList;
     }
 
     protected void tradeCards(int round) {

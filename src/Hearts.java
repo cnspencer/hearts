@@ -25,10 +25,11 @@ public class Hearts extends Application {
     //Player menu
     @FXML protected TextField svIP;
     @FXML protected Button ipSubmit;
+    @FXML protected TextField p1Name;
     @FXML protected TextField p1IP;
-    @FXML protected TextField p2IP;
-    @FXML protected TextField p3IP;
-    @FXML protected TextField p4IP;
+//    @FXML protected TextField p2IP;
+//    @FXML protected TextField p3IP;
+//    @FXML protected TextField p4IP;
     @FXML protected CheckBox p2Bot;
     @FXML protected CheckBox p3Bot;
     @FXML protected CheckBox p4Bot;
@@ -39,7 +40,7 @@ public class Hearts extends Application {
     private String server;
     private Stage st;
     private int numRounds = 4;
-    private String clientIP;
+//    private String clientIP;
 
     public void start(Stage st) {
         this.st = st;

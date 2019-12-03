@@ -6,11 +6,13 @@
 public class Player {
     private Card[] hand = new Card[13];
     private String ip;
+    private String name;
     private boolean isBot;
     private int score = 0;
 
-    Player(String ip) {
+    Player(String ip, String name) {
         this.ip = ip;
+        this.name = name;
         this.isBot = this.ip.equalsIgnoreCase("bot");
     }
 
