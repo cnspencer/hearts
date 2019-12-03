@@ -55,4 +55,15 @@ public class Player {
     public void addScore(int points) {
         this.score =+ points;
     }
+
+    public boolean hasTwoOfClubs() {
+        for (Card i:this.hand) {
+            if (i.getNumber().equals(Numbers.TWO)) {
+                if (i.getSuit().equals(Suits.CLUBS)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }
