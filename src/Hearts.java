@@ -34,11 +34,11 @@ public class Hearts extends Application {
     @FXML protected TextField name;
     @FXML protected TextField pIP;
     //Game window
-    @FXML protected Pane main;
+    @FXML protected Pane cards;
     @FXML protected Label instructionText;
 
     private String server;
-    private String clientIP;
+    protected Player me;
     private Stage st;
     private int numRounds = 4;
 
@@ -143,40 +143,60 @@ public class Hearts extends Application {
             if (line.startsWith("error")) {
                 this.instructionText.setText("Error: " + line.replaceFirst("error", "") + ".\nDisconnecting from server.\nPlease restart game.");
                 connected = false;
-            } else if (line.startsWith("p" + this.pIP)) {
-                    line = line.replaceFirst("p" + this.pIP, "");
+            } else if (line.startsWith("pass" + this.pIP)) {
+                line = line.replaceFirst("pass" + this.pIP, "");
+                this.instructionText.setText("Choose three cards to pass to the player to the " + line + ".");
+                int selected = 0;
+                while (selected != 3) {
+                    for (Card i : this.me.getHand()) {
+                        if (i.isSelected()) {
+                            selected++;
+                        }
+                    }
+                }
+                submit = "";
+                for (Card i : this.me.getHand()) {
+                    submit = submit.concat("card" + i.getNumber() + ":" + i.getSuit());
+                }
+            } else if (line.startsWith("hand")) {
+                line = line.replaceFirst("handp", "");
+                this.instructionText.setText("The hand goes to " + line);
+                wait(2);
+                this.instructionText.setText("It is " + line + "'s turn.");
+                if (line.equalsIgnoreCase(this.name.getText())) {
+                    this.me.addScore(Integer.parseInt(line.replaceFirst(this.name.getText(), "")));
+                } else if (line.startsWith("results")) {
+                    String[] p1 = read.readLine().trim().replaceFirst("resultsp", "").split(":");
+                    String[] p2 = read.readLine().trim().replaceFirst("resultsp", "").split(":");
+                    String[] p3 = read.readLine().trim().replaceFirst("resultsp", "").split(":");
+                    String[] p4 = read.readLine().trim().replaceFirst("resultsp", "").split(":");
+                    String name1 = p1[0];
+                    int score1 = Integer.parseInt(p1[1]);
+                    String name2 = p2[0];
+                    int score2 = Integer.parseInt(p2[1]);
+                    String name3 = p3[0];
+                    int score3 = Integer.parseInt(p3[1]);
+                    String name4 = p4[0];
+                    int score4 = Integer.parseInt(p4[1]);
+                    //Show results window
+                    Stage st3 = new Stage();
+                    st3.setScene(new Scene(this.getResults(name1, score1, name2, score2, name3, score3, name4, score4), 400, 400));
+                    st3.setTitle("Results");
+                    this.st = st3;
+                    this.st.show();
+                    connected = false;
+                }
 
-            } else if (line.startsWith("results")) {
-                String[] p1 = read.readLine().trim().split(":");
-                String[] p2 = read.readLine().trim().split(":");
-                String[] p3 = read.readLine().trim().split(":");
-                String[] p4 = read.readLine().trim().split(":");
-                String name1 = p1[0];
-                int score1 = Integer.parseInt(p1[1]);
-                String name2 = p2[0];
-                int score2 = Integer.parseInt(p2[1]);
-                String name3 = p3[0];
-                int score3 = Integer.parseInt(p3[1]);
-                String name4 = p4[0];
-                int score4 = Integer.parseInt(p4[1]);
-                //Show results window
-                Stage st3 = new Stage();
-                st3.setScene(new Scene(this.getResults(name1, score1, name2, score2, name3, score3, name4, score4), 400, 400));
-                st3.setTitle("Results");
-                this.st = st3;
-                this.st.show();
-                connected = false;
+                // send the action to the server
+                if (submit != null) {
+                    ServerSocket serv = new ServerSocket(5545);
+                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+                    writer.write(submit);
+                    writer.flush();
+                    serv.close();
+                }
+                socket.close();
             }
-
-            // send the action to the server
-            if (submit != null) {
-                ServerSocket serv = new ServerSocket(5545);
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-                writer.write(submit);
-                writer.flush();
-                serv.close();
-            }
-            socket.close();
         }
     }
 
@@ -188,36 +208,23 @@ public class Hearts extends Application {
         } if (this.svIP.getText().isEmpty()) {
             this.svIP.setPromptText("Need an IP!");
         } else {
-//            this.players[0] = new Player(this.p1IP.getText());
+            this.me = new Player(this.pIP.getText(), this.name.getText());
             this.server = this.svIP.getText();
             this.ipSubmit.setOnMouseClicked(e -> {
                 try {
                     this.connect();
                 } catch (Exception ex) {
-                    System.out.println("Caught " + ex.toString() + " initiating game.");
+                    System.out.println("Caught " + ex.toString() + " connecting to server at " + this.svIP + ".");
                 }
             });
         }
     }
-//    public void p2Bind() {
-//        this.p2IP.setEditable(!this.p2Bot.isSelected());
-//        this.p2IP.setText("bot");
-//        this.p2IP.editableProperty().isNotEqualTo(this.p2Bot.selectedProperty());
-//    }
-//    public void p3Bind() {
-//        this.p3IP.setEditable(!this.p2Bot.isSelected());
-//        this.p3IP.setText("bot");
-//        this.p3IP.editableProperty().isNotEqualTo(this.p3Bot.selectedProperty());
-//    }
-//    public void p4Bind() {
-//        this.p4IP.setEditable(!this.p2Bot.isSelected());
-//        this.p4IP.setText("bot");
-//        this.p4IP.editableProperty().isNotEqualTo(this.p4Bot.selectedProperty());
-//    }
-
 
     //Action methods for GameWindow
     @FXML private void submitTurn() {
+//        if (!legalTurn) {
+//            this.instructionText.setText("Please choose a legal card.");
+//        }
     }
 
 

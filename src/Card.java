@@ -8,9 +8,10 @@ import javafx.scene.image.Image;
 public class Card {
     private Numbers cardNum;
     private Suits cardType;
-    private int value = 0;
+    private int value;
     private Image image;
     private Image back = new Image("/GameData/back.png");
+    private boolean isSelected = false;
     Card(Numbers cardNum, Suits cardType) {
         this.cardNum = cardNum;
         this.cardType = cardType;
@@ -75,6 +76,14 @@ public class Card {
             return 1;
         }
         return 0;
+    }
+
+    public boolean isSelected() {
+        return this.isSelected;
+    }
+
+    public void toggleSelected() {
+        this.isSelected = !this.isSelected;
     }
 
     @Override

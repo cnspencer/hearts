@@ -22,7 +22,7 @@ Server Actions (based on the following input from a client)
 		for each null ip/name, creates a bot internally, records them as "bot1", "bot2" as IPs in the IP array
 		initiates the game with a number of rounds
 		replies at the beginning of each round, which is "passYYY", where YYY depends on the round number for which direction to pass cards
-		reply is "resultspXXX:##", "resultspYYY:$$", etc. at the end of the game, where XXX, YYY are player names and ##, $$ are their respective scores, in order
+		reply is "resultspXXX:##resultspYYY:$$", etc. at the end of the game, where XXX, YYY are player names and ##, $$ are their respective scores, in order
 	"cardXXX:YYYY"
 		adds the XXX of YYYY card to the current hand
 		sends update to other clients with the same string as the input
@@ -31,11 +31,11 @@ Server Actions (based on the following input from a client)
 Client Actions (based on the following replies from server)
 	"errorXXX"
 		print the error and update the "Instruction Text" with a description of the error
-	"handp##.##.##.##"
-		if ##.##.##.## is this client's Player's IP, calculate the score and update the "Instruction Text" with the next turn's player name
+	"handpXXX"
+		if XXX is this client's Player's name, calculate the score and update the "Instruction Text" with the next turn's player name
 	"passYYY"
 		allow the player to select 3 cards and update the "Instruction Text" with the direction YYY
-	"resultspXXX:##", "resultspYYY:$$", etc.
+	"resultspXXX:##resultspYYY:$$", etc.
 		show the results window for the player XXX and his or her score ##, player YYY and his or her score $$, etc.
 Client Messages without initial prompt from server
 	"start"

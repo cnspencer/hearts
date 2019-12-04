@@ -35,12 +35,12 @@ public class HeartsServer {
 //                    round.tradeCards(i);
 //                }
             } else if (line.startsWith("turn")) {
-                // TODO: process turn then send signal to update graphics
+                // TODO: process turn then send signal to update everyone's graphics
             } else if (line.startsWith("end")) {
                 connect = false;
                 reply = "results";
             } else {
-                reply = "errorinvalidstring";
+                reply = "errorinvalidresponse";
             }
 
             // send the action to each client
