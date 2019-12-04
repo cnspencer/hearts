@@ -29,11 +29,16 @@ public class HeartsServer {
                 }
             } else if (line.startsWith("start")) {
                 // TODO: Need to set bots when less than four IPs are set
+//                for (int i = 0; i < this.numRounds; i++) {
+//                    Round round = new Round(i);
+//                    round.displayPX(1);
+//                    round.tradeCards(i);
+//                }
             } else if (line.startsWith("turn")) {
                 // TODO: process turn then send signal to update graphics
             } else if (line.startsWith("end")) {
                 connect = false;
-                reply = "getresults";
+                reply = "results";
             } else {
                 reply = "errorinvalidstring";
             }
@@ -46,7 +51,7 @@ public class HeartsServer {
                         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(sendTo.getOutputStream()));
                         writer.write(reply);
                         writer.flush();
-                        sendTo.close()
+                        sendTo.close();
                     }
                 }
             }

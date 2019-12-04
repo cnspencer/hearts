@@ -1,2 +1,44 @@
-Requirements and planning for Multiplayer/Computer components
+Requirements and planning for Multiplayer/Bot components
 -------------------------------------------------------------
+
+Client Responsibilities
+	Each client has a Player object and is responsible for that Player
+	The client handles the game logic of its Player's legal plays and calculating score when the hand goes to its Player
+
+Server Responsibilities
+	The server keeps track of the players who are connected
+	The server handles updating the other clients when another client has sent its play update
+	The game logic the server is responsible for is shooting for the moon scenarios, to whom card passes go, determining ends and beginnings of rounds, and the recipient of the hand (and thus the next turn)
+
+
+Server Actions (based on the following input from a client)
+	"ip##.##.##.##"
+		stores ##.##.##.## in an array for later reference
+		no reply unless the array is full, then reply is "erroripfull"
+	"nameXXX"
+		stores XXX in an array at the same index as the ip for the same player
+		no reply unless the array is full, then reply is "errornamefull"
+	"start"
+		for each null ip/name, creates a bot internally, records them as "bot1", "bot2" as IPs in the IP array
+		initiates the game with a number of rounds
+		replies at the beginning of each round, which is "passYYY", where YYY depends on the round number for which direction to pass cards
+		reply is "resultspXXX:##", "resultspYYY:$$", etc. at the end of the game, where XXX, YYY are player names and ##, $$ are their respective scores, in order
+	"cardXXX:YYYY"
+		adds the XXX of YYYY card to the current hand
+		sends update to other clients with the same string as the input
+		additional reply if it is the last card to be played; replies with "handp##.##.##.##", where # is the player IP the hand goes to
+
+Client Actions (based on the following replies from server)
+	"errorXXX"
+		print the error and update the "Instruction Text" with a description of the error
+	"handp##.##.##.##"
+		if ##.##.##.## is this client's Player's IP, calculate the score and update the "Instruction Text" with the next turn's player name
+	"passYYY"
+		allow the player to select 3 cards and update the "Instruction Text" with the direction YYY
+	"resultspXXX:##", "resultspYYY:$$", etc.
+		show the results window for the player XXX and his or her score ##, player YYY and his or her score $$, etc.
+Client Messages without initial prompt from server
+	"start"
+		sent once one player presses a button to confirm everyone is ready to play
+	"cardXXX:YYYY"
+		sent once card XXX of YYYY has been selected and the "Submit Turn" button pressed

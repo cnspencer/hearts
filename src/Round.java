@@ -30,7 +30,7 @@ public class Round {
     }
 
     protected Node[] displayPX(int player) {
-        Node[] nodeList = new Node[4]
+        Node[] nodeList = new Node[4];
         for (int i = 0; i < this.players[player].getHand().length; i++) {
             ImageView img = new ImageView(this.players[player].getCard(i).showFront());
             nodeList[i] = img;

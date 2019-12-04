@@ -14,25 +14,10 @@
     </VBox>
     <HBox prefHeight="480.0" prefWidth="480.0">
         <VBox>
-            <TextField fx:id="p1Name" promptText="Enter your name" translateY="60"/>
-            <TextField fx:id="p1IP" promptText="Your IP" translateY="60"/>
+            <TextField fx:id="name" promptText="Enter your name" translateY="60"/>
+            <TextField fx:id="pIP" promptText="Your IP" translateY="60"/>
             <Label text="Player IP (self)" translateY="60"/>
         </VBox>
-        <!--<VBox>-->
-            <!--&lt;!&ndash;<TextField fx:id="p2IP" promptText="IP of player #2" translateY="60"  translateX="10"/>&ndash;&gt;-->
-            <!--<Label text="Player 2   " translateY="60"  translateX="15"/>-->
-            <!--<CheckBox fx:id="p2Bot" text="Bot" translateY="60"  translateX="15"/>-->
-        <!--</VBox>-->
-        <!--<VBox>-->
-            <!--&lt;!&ndash;<TextField fx:id="p3IP" promptText="IP of player #3" translateY="60"  translateX="15"/>&ndash;&gt;-->
-            <!--<Label text="Player 3   " translateY="60"  translateX="20"/>-->
-            <!--<CheckBox fx:id="p3Bot" text="Bot" translateY="60"  translateX="20"/>-->
-        <!--</VBox>-->
-        <!--<VBox>-->
-            <!--&lt;!&ndash;<TextField fx:id="p4IP" promptText="IP of player #4" translateY="60"  translateX="20"/>&ndash;&gt;-->
-            <!--<Label text="Player 4   " translateY="60"  translateX="25"/>-->
-            <!--<CheckBox fx:id="p4Bot" text="Bot" translateY="60"  translateX="25"/>-->
-        <!--</VBox>-->
     </HBox>
     <VBox>
         <Button fx:id="ipSubmit" text="Submit" alignment="CENTER" onMouseClicked="#setIPs" translateY="-60"  translateX="320"/>
