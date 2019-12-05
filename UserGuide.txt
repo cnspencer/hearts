@@ -4,8 +4,9 @@ How to get the Hearts Client
 How to Run the Game
 	1. Double-click on "CS2410-Hearts".
 	2. The "Player Menu" should appear. Enter the server IP (#DEFAULTIPHERE for a dedicated server).
-	3. Enter your IP. Only one player needs to check the bots. Press "submit".
+	3. Enter your IP. Enter a unique name (i.e. two or more players cannot have a name "yo"). Press "submit".
 		Players should coordinate to ensure no information is doubly sent as well as connecting to the server one at a time.
+		Use numbers in your name at your own risk.
 	4. A new screen (called the "Game Window") should appear. The "Player Menu" can safely be closed if it is still opened.
 	5. At the beginning of each round, each player chooses 3 cards to trade from his or her hand. The person the chosen cards go to is given by the "Instruction Text" to the right, above the "Submit Turn" button.
 	6. When it is your turn, as designated by the "Instruction Text", click on a card to choose it. Press the "Submit Turn" button to confirm.

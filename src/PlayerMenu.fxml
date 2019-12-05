@@ -4,13 +4,11 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.CheckBox?>
 
 <VBox prefHeight="480.0" prefWidth="720.0" xmlns:fx="http://javafx.com/fxml" fx:controller="Hearts" >
     <VBox>
         <TextField fx:id="svIP" promptText="IP of server" translateY="20"/>
         <Label text="Server IP" translateY="20"/>
-        <!--<Button fx:id="connect" text="Connect to Server" alignment="CENTER" onMouseClicked="#servConnect" translateY="-20" translateX="320"/>-->
     </VBox>
     <HBox prefHeight="480.0" prefWidth="480.0">
         <VBox>

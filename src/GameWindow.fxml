@@ -5,14 +5,20 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.Pane?>
 
 <HBox prefHeight="480.0" prefWidth="720.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.172-ea" fx:controller="Hearts">
-    <FlowPane fx:id="cards" prefHeight="390" prefWidth="545">
-    </FlowPane>
+    <Pane>
+        <FlowPane fx:id="center"/>
+        <Label fx:id="pLeft"/>
+        <Label fx:id="pTop"/>
+        <Label fx:id="pRight"/>
+        <Label fx:id="pMe"/>
+        <FlowPane fx:id="hand"/>
+    </Pane>
     <VBox>
         <Label fx:id="instructionText" alignment="CENTER" contentDisplay="CENTER" layoutX="525.0" layoutY="55.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="221.0" prefWidth="175.0" text="Welcome to Hearts! Connecting to players..." textAlignment="CENTER" wrapText="true">
             <font><Font name="Lato Heavy" size="13.0" /></font></Label>
-            <Button onMouseClicked="#submitTurn" text="Submit Turn" alignment="CENTER_RIGHT">
-            </Button>
+        <Button onMouseClicked="#submitTurn" text="Submit Turn" alignment="CENTER_RIGHT"/>
     </VBox>
 </HBox>

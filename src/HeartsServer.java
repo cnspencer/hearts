@@ -53,8 +53,13 @@ public class HeartsServer {
                         rounds[i] = true;
                     }
                 }
-                if (round != rounds.length) {   // once all player's hands are empty, deal a new deck
-                    for (boolean i : empty) {
+                if (round != rounds.length) {
+                    for (int i = 0; i < ips.length; i++) {      // set this player's spot in empty[] to true
+                        if (ips[i].equals(socket.getInetAddress().toString())) {
+                            empty[i] = true;
+                        }
+                    }
+                    for (boolean i : empty) {   // once all player's hands are empty, deal a new deck
                         if (!i) {
                             break;
                         } else {

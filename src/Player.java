@@ -17,12 +17,14 @@ public class Player {
     }
 
     public void dealCard(Card card, int deal) {
+        /*Adds a card to the designated index*/
         this.hand[deal] = card;
     }
 
     public void addCard(Card card) {
-        for (Card i : this.hand) {
-            if (i == null) {
+        /*Adds the card to the next available space*/
+        for (int i = 0; i < this.hand.length; i++) {
+            if (this.hand[i] == null) {
                 this.hand[i] = card;
             }
         }
@@ -34,6 +36,10 @@ public class Player {
 
     public String getIP() {
         return this.ip;
+    }
+
+    public String getName() {
+        return this.name;
     }
 
     public int getScore() {

@@ -4,10 +4,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -16,8 +17,6 @@ import javafx.scene.shape.*;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
-import java.awt.event.MouseEvent;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -35,14 +34,17 @@ public class Hearts extends Application {
     @FXML protected TextField name;
     @FXML protected TextField pIP;
     //Game window
-    @FXML protected Pane cards;
+    @FXML protected FlowPane center;
+    @FXML protected FlowPane hand;
+    @FXML protected Label pLeft;
+    @FXML protected Label pTop;
+    @FXML protected Label pRight;
+    @FXML protected Label pMe;
     @FXML protected Label instructionText;
 
     private String server;
-    protected Player me;
+    private Player me;
     private Stage st;
-//    private int numRounds = 4;
-    private Suits firstSuit;
 
     public void start(Stage st) {
         this.st = st;
@@ -142,10 +144,10 @@ public class Hearts extends Application {
             BufferedReader read = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String line = read.readLine().trim();
 
-            if (line.startsWith("error")) {
+            if (line.startsWith("error")) {                         // report an error
                 this.instructionText.setText("Error: " + line.replaceFirst("error", "") + ".\nDisconnecting from server.\nPlease restart game.");
                 connected = false;
-            } else if (line.startsWith("pass" + this.pIP)) {
+            } else if (line.startsWith("pass" + this.pIP)) {        // time to pass cards
                 line = line.replaceFirst("pass" + this.pIP, "");
                 this.instructionText.setText("Choose three cards to pass to the player to the " + line + ".");
                 int selected = 0;
@@ -160,7 +162,7 @@ public class Hearts extends Application {
                 for (Card i : this.me.getHand()) {
                     submit = submit.concat("card" + i.getNumber() + ":" + i.getSuit());
                 }
-            } else if (line.startsWith("hand")) {
+            } else if (line.startsWith("hand")) {                   // clear center and add score if it's my hand
                 line = line.replaceFirst("handp", "");
                 this.instructionText.setText("The hand goes to " + line);
                 wait(2);
@@ -188,6 +190,23 @@ public class Hearts extends Application {
                     this.st = st3;
                     this.st.show();
                     connected = false;
+                } else if (line.startsWith("card")) {               // update center or add passed cards to hand
+                    line = line.replaceFirst("card", "");
+                    String[] cardLine = line.split(":");
+                    if (line.contains("card")) {
+                        int n = 1;
+                        while (cardLine[n].contains("card") && cardLine[n] != null) {
+                            cardLine = cardLine[n].split(":");
+                            n++;
+                        }
+                        for (int i = 0; i < cardLine.length; i++, i++) {
+                            Card card = new Card(Numbers.valueOf(cardLine[i]), Suits.valueOf(cardLine[i++]));
+                            this.center.getChildren().add(new ImageView(card.showFront()));
+                        }
+                    } else {
+                        Card card = new Card(Numbers.valueOf(cardLine[0]), Suits.valueOf(cardLine[1]));
+                        this.center.getChildren().add(new ImageView(card.showFront()));
+                    }
                 }
 
                 // send the action to the server
@@ -238,9 +257,11 @@ public class Hearts extends Application {
             this.instructionText.setText("Please choose a legal card.");
         } else {
             // check for legality of card selected
-            if (!select.getSuit().equals(firstSuit)) { // card must have same suit as first card
+            if (!select.getSuit().equals((Suits.valueOf(((ImageView)center.getChildren().get(0)).getImage().getUrl().replaceFirst(".png", "").split("of")[1])))) {
+                // card must have same suit as first card
                 for (Card i : this.me.getHand()) {
-                    if (i.getSuit().equals(firstSuit)) { // unless they have none of those cards
+                    if (i.getSuit().equals((Suits.valueOf(((ImageView)center.getChildren().get(0)).getImage().getUrl().replaceFirst(".png", "").split("of")[1])))) {
+                        // unless they have none of those cards
                         this.instructionText.setText("Please choose a legal card.");
                         break;
                     }
