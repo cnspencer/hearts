@@ -4,11 +4,14 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class HeartsServer {
     private static void runServer() throws Exception {
         String[] ips = new String[4];
+        String[] names = new String[4];
+        String[] currentCards = new String[4];
+        boolean[] empty = new boolean[4];
+        boolean[] rounds = new boolean[4];
         ServerSocket servSock = new ServerSocket(5545);
 
         boolean connect = true;
@@ -19,28 +22,52 @@ public class HeartsServer {
             BufferedReader read = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String line = read.readLine().trim();
 
-            if (line.startsWith("ip")) {
-                // set ips of players
+            if (line.startsWith("ip")) {                // set ips of players
                 for (int i = 0; i < ips.length; i++) {
                     if (ips[i] == null) {
                         ips[i] = line.replaceFirst("ip", "");
                         break;
+                    } else if (i == ips.length - 1) {
+                        reply = "erroripfull";
                     }
                 }
-            } else if (line.startsWith("start")) {
-                // TODO: Need to set bots when less than four IPs are set
-//                for (int i = 0; i < this.numRounds; i++) {
-//                    Round round = new Round(i);
-//                    round.displayPX(1);
-//                    round.tradeCards(i);
-//                }
-            } else if (line.startsWith("turn")) {
-                // TODO: process turn then send signal to update everyone's graphics
+            } else if (line.startsWith("name")) {       // set ips of players
+                for (int i = 0; i < names.length; i++) {
+                    if (names[i] == null) {
+                        names[i] = line.replaceFirst("name", "");
+                        break;
+                    } else if (i == names.length - 1) {
+                        reply = "errornamefull";
+                    }
+                }
+            } else if (line.startsWith("start")) {      // initiate the game: assign bots, deal cards
+                // TODO: set bots when less than four IPs are set
+                // TODO: deal cards
+            } else if (line.startsWith("card")) {       // echo message to update each client GUI
+
             } else if (line.startsWith("end")) {
-                connect = false;
-                reply = "results";
+                int round = 0;
+                for (int i = 0; i < rounds.length; i++) {
+                    if (!rounds[i]) {
+                        round = i + 1;
+                        rounds[i] = true;
+                    }
+                }
+                if (round != rounds.length) {   // once all player's hands are empty, deal a new deck
+                    for (boolean i : empty) {
+                        if (!i) {
+                            break;
+                        } else {
+                            // TODO: deal cards
+                        }
+                    }
+                } else {                        // last round - send results
+                    connect = false;
+                    reply = "results";
+                    // TODO: get everyone's scores together and concatenate onto reply
+                }
             } else {
-                reply = "errorinvalidresponse";
+                reply = "errorinvalidresponsefromclient";
             }
 
             // send the action to each client
@@ -58,13 +85,7 @@ public class HeartsServer {
             socket.close();
         }
     }
-    private void game(int numRounds) {
-        for (int i = 0; i < numRounds; i++) {
-            Round round = new Round(i);
-            round.displayPX(1);
-            round.tradeCards(i);
-        }
-    }
+
     public static void main(String[] args) throws Exception {
         runServer();
     }

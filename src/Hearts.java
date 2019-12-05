@@ -17,6 +17,7 @@ import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.awt.event.MouseEvent;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -40,7 +41,8 @@ public class Hearts extends Application {
     private String server;
     protected Player me;
     private Stage st;
-    private int numRounds = 4;
+//    private int numRounds = 4;
+    private Suits firstSuit;
 
     public void start(Stage st) {
         this.st = st;
@@ -178,6 +180,7 @@ public class Hearts extends Application {
                     int score3 = Integer.parseInt(p3[1]);
                     String name4 = p4[0];
                     int score4 = Integer.parseInt(p4[1]);
+
                     //Show results window
                     Stage st3 = new Stage();
                     st3.setScene(new Scene(this.getResults(name1, score1, name2, score2, name3, score3, name4, score4), 400, 400));
@@ -214,7 +217,7 @@ public class Hearts extends Application {
                 try {
                     this.connect();
                 } catch (Exception ex) {
-                    System.out.println("Caught " + ex.toString() + " connecting to server at " + this.svIP + ".");
+                    System.out.println("Caught " + ex.toString() + " connecting to server at " + this.svIP.getText() + ".");
                 }
             });
         }
@@ -222,9 +225,37 @@ public class Hearts extends Application {
 
     //Action methods for GameWindow
     @FXML private void submitTurn() {
-//        if (!legalTurn) {
-//            this.instructionText.setText("Please choose a legal card.");
-//        }
+        System.out.println("Turn processing...");
+        // find the selected card
+        Card select = null;
+        for (Card i: this.me.getHand()) {
+            if (i.isSelected()) {
+                select = i;
+                break;
+            }
+        }
+        if (select == null) { // no card chosen
+            this.instructionText.setText("Please choose a legal card.");
+        } else {
+            // check for legality of card selected
+            if (!select.getSuit().equals(firstSuit)) { // card must have same suit as first card
+                for (Card i : this.me.getHand()) {
+                    if (i.getSuit().equals(firstSuit)) { // unless they have none of those cards
+                        this.instructionText.setText("Please choose a legal card.");
+                        break;
+                    }
+                }
+            }
+            for (Card i : this.me.getHand()) { // must play two of clubs if in hand
+                if (i.getNumber() == Numbers.TWO) {
+                    if (i.getSuit() == Suits.CLUBS) {
+                        if (!i.isSelected()) {
+                            this.instructionText.setText("You must play the Two of Clubs to start the game.");
+                        }
+                    }
+                }
+            }
+        }
     }
 
 

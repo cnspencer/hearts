@@ -16,8 +16,16 @@ public class Player {
         this.isBot = this.ip.equalsIgnoreCase("bot");
     }
 
-    public void addCard(Card card, int deal) {
+    public void dealCard(Card card, int deal) {
         this.hand[deal] = card;
+    }
+
+    public void addCard(Card card) {
+        for (Card i : this.hand) {
+            if (i == null) {
+                this.hand[i] = card;
+            }
+        }
     }
 
     public boolean isBot() {
