@@ -132,9 +132,11 @@ public class Hearts extends Application {
 
     //Game logic
     private void connect() throws Exception {
+        //load everything onto the Game Window
         Stage st2 = new Stage();
         st2.setScene(new Scene(this.getGameLoader()));
         st2.setTitle("Hearts Game");
+        
         this.st = st2;
         this.st.show();
         boolean connected = true;

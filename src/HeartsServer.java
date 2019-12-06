@@ -4,11 +4,13 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class HeartsServer {
     private static void runServer() throws Exception {
         String[] ips = new String[4];
         String[] names = new String[4];
+        ArrayList<Player> bots = new ArrayList<>();
         String[] currentCards = new String[4];
         boolean[] empty = new boolean[4];
         boolean[] rounds = new boolean[4];
@@ -41,8 +43,25 @@ public class HeartsServer {
                     }
                 }
             } else if (line.startsWith("start")) {      // initiate the game: assign bots, deal cards
-                // TODO: set bots when less than four IPs are set
+                int botNum = 1;
+                for (int i = 0; i < ips.length; i++) {
+                    if (ips[i] == null) {
+                        bots.add(new Player("bot" + botNum, "bot" + botNum));
+                        ips[i] = "bot" + botNum;
+                        names[i] = "bot" + botNum;
+                        botNum++;
+                    }
+                }
                 // TODO: deal cards
+
+                for (int i = 0; i < names.length; i++) {
+                    if (names[i].contains("bot")) {
+                        String bot = names[i].replaceFirst("bot", "");
+                        bots.get(Integer.parseInt(bot)).dealCard(card);
+                    } else {
+                        sendTo(ips[i]);
+                    }
+                }
             } else if (line.startsWith("card")) {       // echo message to update each client GUI
 
             } else if (line.startsWith("end")) {
