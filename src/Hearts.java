@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -34,6 +35,7 @@ public class Hearts extends Application {
     @FXML protected TextField name;
     @FXML protected TextField pIP;
     //Game window
+    @FXML protected HBox box;
     @FXML protected FlowPane center;
     @FXML protected FlowPane hand;
     @FXML protected Label pLeft;
@@ -41,6 +43,8 @@ public class Hearts extends Application {
     @FXML protected Label pRight;
     @FXML protected Label pMe;
     @FXML protected Label instructionText;
+
+    private int padding = 15;
 
     private String server;
     private Player me;
@@ -136,7 +140,17 @@ public class Hearts extends Application {
         Stage st2 = new Stage();
         st2.setScene(new Scene(this.getGameLoader()));
         st2.setTitle("Hearts Game");
-        
+        //bindings
+        this.pLeft.setTranslateX(this.padding);
+        this.pLeft.translateYProperty().bind(this.box.heightProperty().divide(2));
+        this.pTop.translateXProperty().bind(this.box.widthProperty().divide(2).subtract(175));
+        this.pTop.setTranslateY(this.padding);
+        this.pRight.translateXProperty().bind(this.box.widthProperty().subtract(175));
+        this.pRight.translateYProperty().bind(this.box.heightProperty().divide(2));
+        this.center.translateXProperty().bind(this.box.widthProperty().divide(2).subtract(175));
+        this.center.translateYProperty().bind(this.box.heightProperty().divide(2));
+        this.hand.translateXProperty().bind(this.box.widthProperty().divide(2).subtract(175));
+        this.hand.translateYProperty().bind(this.box.heightProperty().add(this.padding));
         this.st = st2;
         this.st.show();
         boolean connected = true;
@@ -149,11 +163,30 @@ public class Hearts extends Application {
             if (line.startsWith("error")) {                         // report an error
                 this.instructionText.setText("Error: " + line.replaceFirst("error", "") + ".\nDisconnecting from server.\nPlease restart game.");
                 connected = false;
-            } else if (line.startsWith("pass" + this.pIP)) {        // time to pass cards
-                line = line.replaceFirst("pass" + this.pIP, "");
+            } else if (line.startsWith("deal")) {
+                String[] cards = line.replaceFirst("deal", "").split(":");
+                for (int i = 0; i < cards.length; i++, i++) {
+                    this.me.dealCard(new Card(Numbers.valueOf(cards[i]), Suits.valueOf(cards[i++])), i);
+                }
+                for (Card i : this.me.getHand()) {
+                    ImageView img = new ImageView(i.showFront());
+                    this.hand.getChildren().add(img);
+                    img.setOnMouseClicked(e -> {
+                        if (img.getScaleX() == 1.0) {
+                            img.setScaleX(1.2);
+                            img.setScaleY(1.2);
+                        } else {
+                            img.setScaleX(1.0);
+                            img.setScaleY(1.0);
+                        }
+                        this.me.getCard(Numbers.valueOf(img.getImage().getUrl().split("of")[0]), Suits.valueOf(img.getImage().getUrl().split("of")[1])).toggleSelected();
+                    });
+                }
+            } else if (line.startsWith("pass")) {                   // time to pass cards
+                line = line.replaceFirst("pass", "");
                 this.instructionText.setText("Choose three cards to pass to the player to the " + line + ".");
                 int selected = 0;
-                while (selected != 3) {
+                while (selected != 3) {     // wait until player has selected exactly 3 cards
                     for (Card i : this.me.getHand()) {
                         if (i.isSelected()) {
                             selected++;
@@ -162,7 +195,10 @@ public class Hearts extends Application {
                 }
                 submit = "";
                 for (Card i : this.me.getHand()) {
-                    submit = submit.concat("card" + i.getNumber() + ":" + i.getSuit());
+                    if (i.isSelected()) {
+                        submit = submit.concat("card" + i.getNumber() + ":" + i.getSuit());
+                        this.me.removeCard(i);
+                    }
                 }
             } else if (line.startsWith("hand")) {                   // clear center and add score if it's my hand
                 line = line.replaceFirst("handp", "");
@@ -210,7 +246,6 @@ public class Hearts extends Application {
                         this.center.getChildren().add(new ImageView(card.showFront()));
                     }
                 }
-
                 // send the action to the server
                 if (submit != null) {
                     ServerSocket serv = new ServerSocket(5545);

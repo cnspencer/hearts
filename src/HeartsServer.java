@@ -52,18 +52,23 @@ public class HeartsServer {
                         botNum++;
                     }
                 }
-                // TODO: deal cards
+                // TODO: deal cards for round 1
 
                 for (int i = 0; i < names.length; i++) {
                     if (names[i].contains("bot")) {
                         String bot = names[i].replaceFirst("bot", "");
                         bots.get(Integer.parseInt(bot)).dealCard(card);
                     } else {
-                        sendTo(ips[i]);
+                        sendTo(ips[i], reply);
                     }
                 }
             } else if (line.startsWith("card")) {       // echo message to update each client GUI
-
+                line = line.replaceFirst("card", "");
+                if (line.contains("card")) {
+                    // TODO: figure out to whom these passed cards go
+                } else {
+                    reply = "card" + line;
+                }
             } else if (line.startsWith("end")) {
                 int round = 0;
                 for (int i = 0; i < rounds.length; i++) {
@@ -82,7 +87,7 @@ public class HeartsServer {
                         if (!i) {
                             break;
                         } else {
-                            // TODO: deal cards
+                            // TODO: deal cards for round++
                         }
                     }
                 } else {                        // last round - send results
