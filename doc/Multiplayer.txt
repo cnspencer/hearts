@@ -30,7 +30,7 @@ Server Actions (based on the following input from a client)
 		On normal turn
 			adds the XXX of YYYY card to the current hand
 			sends update to other clients with the same string as the input
-			additional reply if it is the last card to be played; replies with "handpXXX", where # is the player's name to whom the hand goes
+			additional reply if it is the last card to be played; replies with "handpXXX", where XXX is the player's name to whom the hand goes
 
 Client Actions (based on the following replies from server)
 	"errorXXX"

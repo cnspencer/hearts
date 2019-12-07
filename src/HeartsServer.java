@@ -86,21 +86,13 @@ public class HeartsServer {
                 }
 
                 rounds[0] = true;
-                String direction = null;
                 int round = 0;
                 for (int i = 0; i < rounds.length; i++) {
                     if (rounds[i]) {
                         round = i;
                     }
                 }
-                switch (round) {
-                    case (0):
-                        direction = "right"; break;
-                    case (1):
-                        direction = "left"; break;
-                    case (2):
-                        direction = "top"; break;
-                }
+                String direction = getDirection(round);
                 int botx = 0;
                 if (direction != null) {
                     reply = "pass" + direction;
@@ -133,7 +125,43 @@ public class HeartsServer {
             } else if (line.startsWith("card")) {       // card operations
                 line = line.replaceFirst("card", "");
                 if (line.contains("card")) {            // handle card passing
-                    // TODO: figure out to whom these passed cards go
+                    for (int i = 0; i < ips.length; i++) {
+                        if (ips[i].equals(socket.getInetAddress().toString())) {
+                            passes[i] = line.concat("card");
+                        }
+                    }
+                    for (int i = 0; i < passes.length; i++) {
+                        if (passes[i] != null) {
+                            if (i == passes.length - 1) {
+                                int round = 0;
+                                for (int j = 0; j < rounds.length; j++) {
+                                    if (rounds[j]) {
+                                        round = j;
+                                    }
+                                }
+                                switch (round) {
+                                    case (0):
+                                        sendTo(ips[1], passes[0]);
+                                        sendTo(ips[2], passes[1]);
+                                        sendTo(ips[3], passes[2]);
+                                        sendTo(ips[0], passes[3]);
+                                        break;
+                                    case (1):
+                                        sendTo(ips[3], passes[0]);
+                                        sendTo(ips[0], passes[1]);
+                                        sendTo(ips[1], passes[2]);
+                                        sendTo(ips[2], passes[3]);
+                                        break;
+                                    case (2):
+                                        sendTo(ips[2], passes[0]);
+                                        sendTo(ips[3], passes[1]);
+                                        sendTo(ips[0], passes[2]);
+                                        sendTo(ips[1], passes[3]);
+                                        break;
+                                }
+                            }
+                        }
+                    }
                 } else {
                     for (int i = 0; i < currentCards.length; i++) {
                         if (currentCards[i] == null) {      // keep track of the played cards for the bots
@@ -234,15 +262,7 @@ public class HeartsServer {
                                 round = i;
                             }
                         }
-                        String direction = null;
-                        switch (round) {
-                            case (0):
-                                direction = "right"; break;
-                            case (1):
-                                direction = "left"; break;
-                            case (2):
-                                direction = "top"; break;
-                        }
+                        String direction = getDirection(round);
                         int botx = 0;
                         if (direction != null) {
                             reply = "pass" + direction;
@@ -303,6 +323,19 @@ public class HeartsServer {
             deals[Math.floorMod(i, 4)][Math.floorMod(i, 13)] = deck.dealCard();
         }
         return deals;
+    }
+
+    private static String getDirection(int round) {
+        String direction = null;
+        switch (round) {
+            case (0):
+                direction = "right"; break;
+            case (1):
+                direction = "left"; break;
+            case (2):
+                direction = "top"; break;
+        }
+        return direction;
     }
 
     private static void sendTo(String ip, String msg) {

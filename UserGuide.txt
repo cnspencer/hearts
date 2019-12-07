@@ -13,6 +13,8 @@ How to Run the Game
 		NOTE: DO NOT press the "Submit Turn" button until it is your turn. Doing so will probably mess up the game and it may become unable to complete.
 	7. After 4 rounds, the game is finished. The "Results Window" will display the players in order of score (where low is good).
 	8. Close the windows. Connection to the server was terminated at the end of the game.
+Additional Notes:
+	1. It is recommended that many actions be done in the same order as connected in (i.e. Player #1 always submits his or her passing cards first, Player #2 second, etc.).
 
 How to set up a Hearts Server
 	1. Follow "How to get the Hearts Client" instructions
