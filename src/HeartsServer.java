@@ -173,9 +173,9 @@ public class HeartsServer {
                         played[i] = new Card(Numbers.valueOf(currentCards[i].split(":")[0]), Suits.valueOf(currentCards[i].split(":")[1]));
                     }
                     reply = "card" + line;      // echo to other clients
-                    for (String i : ips) {
-                        if (!i.contains("bot")) {
-                            sendTo(i, reply);
+                    for (int i = 0; i < ips.length; i++) {
+                        if (!ips[i].contains("bot")) {
+                            sendTo(ips[i], reply + "p" + names[i]);
                         }
                     }
                     if (currentCards[currentCards.length - 1] != null) { // if all cards are out, give a score to someone

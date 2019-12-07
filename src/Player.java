@@ -202,7 +202,7 @@ public class Player {
     }
 
     public String toString() {
-        return this.ip;
+        return this.name;
     }
 
     public void addScore(int points) {

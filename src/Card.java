@@ -82,6 +82,10 @@ public class Card {
         return this.isSelected;
     }
 
+    public void setSelected(boolean select) {
+        this.isSelected = select;
+    }
+
     public void toggleSelected() {
         this.isSelected = !this.isSelected;
     }

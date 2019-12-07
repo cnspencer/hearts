@@ -136,7 +136,7 @@ public class Hearts extends Application {
     }
 
     //Game logic
-    private void connect() throws Exception {
+    private void connect(String server) throws Exception {
         //load everything onto the Game Window
         Stage st2 = new Stage();
         st2.setScene(new Scene(this.getGameLoader()));
@@ -157,7 +157,7 @@ public class Hearts extends Application {
         boolean connected = true;
         while (connected) {
             String submit = null;
-            Socket socket = new Socket(this.server, 5545);
+            Socket socket = new Socket(server, 5545);
             BufferedReader read = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String line = read.readLine().trim();
 
@@ -180,7 +180,14 @@ public class Hearts extends Application {
                             img.setScaleX(1.0);
                             img.setScaleY(1.0);
                         }
-                        this.me.getCard(Numbers.valueOf(img.getImage().getUrl().split("of")[0]), Suits.valueOf(img.getImage().getUrl().split("of")[1])).toggleSelected();
+                    });
+                    //listener to toggle selection
+                    img.scaleXProperty().addListener(ov -> {
+                        if (img.scaleXProperty().getValue() > 1.0) {
+                            this.me.getCard(Numbers.valueOf(img.getImage().getUrl().split("of")[0]), Suits.valueOf(img.getImage().getUrl().split("of")[1])).setSelected(true);
+                        } else {
+                            this.me.getCard(Numbers.valueOf(img.getImage().getUrl().split("of")[0]), Suits.valueOf(img.getImage().getUrl().split("of")[1])).setSelected(false);
+                        }
                     });
                 }
             } else if (line.startsWith("pass")) {                   // time to pass cards
@@ -242,7 +249,7 @@ public class Hearts extends Application {
                 }
             } else if (line.startsWith("hand")) {                   // clear center and add score if it's my hand
                 line = line.replaceFirst("handp", "");
-                this.instructionText.setText("The hand goes to " + line);
+                this.instructionText.setText("The hand goes to " + line + " and is now " + line + "'s turn");
                 wait(2);
                 this.instructionText.setText("It is " + line + "'s turn.");
                 if (line.equalsIgnoreCase(this.name.getText())) {
@@ -277,9 +284,12 @@ public class Hearts extends Application {
                             cardLine = cardLine[n].split(":");
                             n++;
                         }
+                        this.instructionText.setText("It is " + cardLine[n - 1].split("p")[1] + "'s turn");
+                        cardLine[n - 1] = cardLine[n - 1].split("p")[0];
                         for (int i = 0; i < cardLine.length; i++, i++) {
                             Card card = new Card(Numbers.valueOf(cardLine[i]), Suits.valueOf(cardLine[i++]));
                             this.center.getChildren().add(new ImageView(card.showFront()));
+
                         }
                     } else {
                         Card card = new Card(Numbers.valueOf(cardLine[0]), Suits.valueOf(cardLine[1]));
@@ -306,15 +316,17 @@ public class Hearts extends Application {
         } if (this.svIP.getText().isEmpty()) {
             this.svIP.setPromptText("Need an IP!");
         } else {
-            this.me = new Player(this.pIP.getText(), this.name.getText());
-            this.server = this.svIP.getText();
-            this.ipSubmit.setOnMouseClicked(e -> {
-                try {
-                    this.connect();
-                } catch (Exception ex) {
-                    System.out.println("Caught " + ex.toString() + " connecting to server at " + this.svIP.getText() + ".");
-                }
-            });
+            //having trouble with a null pointer, even though there is text in the fields and they print just fine
+            String playerIP = this.pIP.getText().trim();
+            String playerName = this.name.getText().trim();
+            this.me = new Player(playerIP, playerName);
+            String serverIP = this.svIP.getText().trim();
+            this.server = serverIP;
+            try {
+                this.connect(this.svIP.getText().trim());
+            } catch (Exception ex) {
+                System.out.println("Caught " + ex.toString() + " connecting to server at " + this.svIP.getText());
+            }
         }
     }
 
