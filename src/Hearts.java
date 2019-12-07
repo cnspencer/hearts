@@ -201,6 +201,41 @@ public class Hearts extends Application {
                         this.me.removeCard(i);
                     }
                 }
+            } else if (line.startsWith("p")) {
+                String[] nameLine = line.split("p");
+                String[] names = new String[4];
+                for (String i : nameLine) {
+                    names[Integer.parseInt(i.split(":")[0])] = i.split(":")[1];
+                }
+                int playerNum = 0;
+                for (int i = 0; i < names.length; i++) {
+                    if (names[i].equals(this.me.getName())) {
+                        playerNum = i;
+                        break;
+                    }
+                }
+                switch (playerNum) {
+                    case (0):
+                        this.pMe.setText(names[0]);
+                        this.pLeft.setText(names[1]);
+                        this.pTop.setText(names[2]);
+                        this.pRight.setText(names[3]);
+                    case (1):
+                        this.pMe.setText(names[1]);
+                        this.pLeft.setText(names[2]);
+                        this.pTop.setText(names[3]);
+                        this.pRight.setText(names[0]);
+                    case (2):
+                        this.pMe.setText(names[2]);
+                        this.pLeft.setText(names[3]);
+                        this.pTop.setText(names[0]);
+                        this.pRight.setText(names[1]);
+                    case (3):
+                        this.pMe.setText(names[3]);
+                        this.pLeft.setText(names[0]);
+                        this.pTop.setText(names[1]);
+                        this.pRight.setText(names[2]);
+                }
             } else if (line.startsWith("hand")) {                   // clear center and add score if it's my hand
                 line = line.replaceFirst("handp", "");
                 this.instructionText.setText("The hand goes to " + line);
@@ -334,6 +369,8 @@ public class Hearts extends Application {
             if (msg != null) {
                 for (Card i : select) {
                     if (i != null) {
+                        this.hand.getChildren().remove(this.me.getIndex(i));
+                        this.me.removeCard(i);
                         msg = msg.concat("card" + i.getNumber().toString() + ":" + i.getSuit());
                     }
                 }

@@ -43,7 +43,7 @@ public class HeartsServer {
                         reply = "errornamefull";
                     }
                 }
-            } else if (line.startsWith("start")) {      // initiate the game: assign bots, deal cards
+            } else if (line.startsWith("start")) {      // initiate the game: assign bots, send out names, deal cards
                 int botNum = 1;
                 for (int i = 0; i < ips.length; i++) {
                     if (ips[i] == null) {
@@ -52,6 +52,10 @@ public class HeartsServer {
                         names[i] = "bot" + botNum;
                         botNum++;
                     }
+                }
+                reply = "";
+                for (int i = 0; i < names.length; i++) {        // send the names to everyone
+                    reply = reply.concat("p" + i + ":" + names[i]);
                 }
                 Card[][] deals = dealCards();
                 for (int i = 0; i < ips.length; i++) {

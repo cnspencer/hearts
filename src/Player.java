@@ -182,6 +182,17 @@ public class Player {
         return null;
     }
 
+    public int getIndex(Card card) {
+        for (int i = 0; i < this.hand.length; i ++) {
+            if (this.hand[i].getNumber() == card.getNumber()) {
+                if (this.hand[i].getSuit() == card.getSuit()) {
+                    return i;
+                }
+            }
+        }
+        return this.hand.length;
+    }
+
     public void removeCard(Card card) {
         for (int i = 0; i < this.hand.length; i++) {
             if (this.hand[i].equals(card)) {
@@ -196,16 +207,5 @@ public class Player {
 
     public void addScore(int points) {
         this.score =+ points;
-    }
-
-    public boolean hasTwoOfClubs() {
-        for (Card i:this.hand) {
-            if (i.getNumber().equals(Numbers.TWO)) {
-                if (i.getSuit().equals(Suits.CLUBS)) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 }
