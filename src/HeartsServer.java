@@ -16,6 +16,7 @@ public class HeartsServer {
         boolean[] rounds = new boolean[4];
         int[] scores = new int[4];
         Card[] played = new Card[3];
+        String[] passes = new String[4];
         ServerSocket servSock = new ServerSocket(5545);
 
         boolean connect = true;
@@ -62,7 +63,9 @@ public class HeartsServer {
                     reply = reply.concat("p" + i + ":" + names[i]);
                 }
                 for (String i : ips) {
-                    sendTo(i, reply);
+                    if (!i.contains("bot")) {
+                        sendTo(i, reply);
+                    }
                 }
 
                 Card[][] deals = dealCards();
@@ -80,18 +83,52 @@ public class HeartsServer {
                         }
                         bot++;
                     }
+                }
 
-                    // does a bot have the Two of Clubs
-                    for (int j = 0; j < currentCards.length; j++) {
-                        played[j] = new Card(Numbers.valueOf(currentCards[j].split(":")[0]), Suits.valueOf(currentCards[j].split(":")[1]));
+                rounds[0] = true;
+                String direction = null;
+                int round = 0;
+                for (int i = 0; i < rounds.length; i++) {
+                    if (rounds[i]) {
+                        round = i;
                     }
-                    int botn = 0;
-                    for (int j = 0; j < ips.length; j++) {
-                        if (bots.get(botn).getCard(Numbers.TWO, Suits.CLUBS) != null) {
-                            bots.get(botn).botTurnPlay(played);
+                }
+                switch (round) {
+                    case (0):
+                        direction = "right"; break;
+                    case (1):
+                        direction = "left"; break;
+                    case (2):
+                        direction = "top"; break;
+                }
+                int botx = 0;
+                if (direction != null) {
+                    reply = "pass" + direction;
+                    for (int i = 0; i < ips.length; i++) {
+                        if (!ips[i].startsWith("bot")) {
+                            sendTo(ips[i], reply);
+                        } else {
+                            Card[] botPass = bots.get(botx).botTurnPass();
+                            String cards = "";
+                            for (Card j : botPass) {
+                                cards = cards.concat("card" + j.getNumber().toString() + ":" + j.getSuit().toString());
+                            }
+                            passes[i] = cards;
+                            botx++;
                         }
-                        botn++;
                     }
+                }
+
+                // does a bot have the Two of Clubs
+                for (int i = 0; i < currentCards.length; i++) {
+                    played[i] = new Card(Numbers.valueOf(currentCards[i].split(":")[0]), Suits.valueOf(currentCards[i].split(":")[1]));
+                }
+                int botn = 0;
+                for (int j = 0; j < ips.length; j++) {
+                    if (bots.get(botn).getCard(Numbers.TWO, Suits.CLUBS) != null) {
+                        bots.get(botn).botTurnPlay(played);
+                    }
+                    botn++;
                 }
             } else if (line.startsWith("card")) {       // card operations
                 line = line.replaceFirst("card", "");
@@ -162,22 +199,79 @@ public class HeartsServer {
                 int round = 0;
                 for (int i = 0; i < rounds.length; i++) {
                     if (!rounds[i]) {
-                        round = i + 1;
+                        round = i;
                         rounds[i] = true;
+                        break;
                     }
                 }
-                if (round != rounds.length) {
+                if (round != rounds.length - 1) {
                     for (int i = 0; i < ips.length; i++) {      // set this player's spot in empty[] to true
                         if (ips[i].equals(socket.getInetAddress().toString())) {
                             empty[i] = true;
                         }
                     }
-                    for (boolean i : empty) {   // once all player's hands are empty, deal a new deck
-                        if (!i) {
-                            break;
-                        } else {
-                            // TODO: deal cards for round++
+                    if (empty[empty.length - 1]) {  // once all player's hands are empty, deal a new deck
+                        Card[][] deals = dealCards();
+                        int bot = 0;
+                        for (int i = 0; i < ips.length; i++) {
+                            String msg = "deal";
+                            if (!ips[i].startsWith("bot")) {
+                                for (Card j : deals[i]) {
+                                    msg = msg.concat(j.getNumber().toString() + ":" + j.getSuit().toString() + ":");
+                                }
+                                sendTo(ips[i], msg);
+                            } else {
+                                for (Card j : deals[i]) {
+                                    bots.get(bot).dealCard(j, i);
+                                }
+                                bot++;
+                            }
+                        }
 
+                        round = 0;
+                        for (int i = 0; i < rounds.length; i++) {
+                            if (rounds[i]) {
+                                round = i;
+                            }
+                        }
+                        String direction = null;
+                        switch (round) {
+                            case (0):
+                                direction = "right"; break;
+                            case (1):
+                                direction = "left"; break;
+                            case (2):
+                                direction = "top"; break;
+                        }
+                        int botx = 0;
+                        if (direction != null) {
+                            reply = "pass" + direction;
+                            for (int i = 0; i < ips.length; i++) {
+                                if (!ips[i].startsWith("bot")) {
+                                    sendTo(ips[i], reply);
+                                } else {
+                                    Card[] botPass = bots.get(botx).botTurnPass();
+                                    String cards = "";
+                                    for (Card j : botPass) {
+                                        cards = cards.concat("card" + j.getNumber().toString() + ":" + j.getSuit().toString());
+                                    }
+                                    passes[i] = cards;
+                                    botx++;
+                                }
+                            }
+
+
+                            // does a bot have the Two of Clubs
+                            for (int i = 0; i < currentCards.length; i++) {
+                                played[i] = new Card(Numbers.valueOf(currentCards[i].split(":")[0]), Suits.valueOf(currentCards[i].split(":")[1]));
+                            }
+                            int botn = 0;
+                            for (int j = 0; j < ips.length; j++) {
+                                if (bots.get(botn).getCard(Numbers.TWO, Suits.CLUBS) != null) {
+                                    bots.get(botn).botTurnPlay(played);
+                                }
+                                botn++;
+                            }
                         }
                     }
                 } else {                        // last round - send results

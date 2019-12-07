@@ -220,21 +220,25 @@ public class Hearts extends Application {
                         this.pLeft.setText(names[1]);
                         this.pTop.setText(names[2]);
                         this.pRight.setText(names[3]);
+                        break;
                     case (1):
                         this.pMe.setText(names[1]);
                         this.pLeft.setText(names[2]);
                         this.pTop.setText(names[3]);
                         this.pRight.setText(names[0]);
+                        break;
                     case (2):
                         this.pMe.setText(names[2]);
                         this.pLeft.setText(names[3]);
                         this.pTop.setText(names[0]);
                         this.pRight.setText(names[1]);
+                        break;
                     case (3):
                         this.pMe.setText(names[3]);
                         this.pLeft.setText(names[0]);
                         this.pTop.setText(names[1]);
                         this.pRight.setText(names[2]);
+                        break;
                 }
             } else if (line.startsWith("hand")) {                   // clear center and add score if it's my hand
                 line = line.replaceFirst("handp", "");
