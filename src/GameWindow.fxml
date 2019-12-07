@@ -19,6 +19,8 @@
     <VBox>
         <Label fx:id="instructionText" alignment="CENTER" contentDisplay="CENTER" layoutX="525.0" layoutY="55.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="221.0" prefWidth="175.0" text="Welcome to Hearts! Connecting to players..." textAlignment="CENTER" wrapText="true">
             <font><Font name="Lato Heavy" size="13.0" /></font></Label>
+        <Label text="When all players are ready, anyone may press the Start button"/>
+        <Button fx:id="startbt" onMouseClicked="#ready"/>
         <Button onMouseClicked="#submitTurn" text="Submit Turn" alignment="CENTER_RIGHT"/>
     </VBox>
 </HBox>

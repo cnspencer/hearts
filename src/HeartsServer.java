@@ -14,6 +14,7 @@ public class HeartsServer {
         String[] currentCards = new String[4];
         boolean[] empty = new boolean[4];
         boolean[] rounds = new boolean[4];
+        int[] scores = new int[4];
         ServerSocket servSock = new ServerSocket(5545);
 
         boolean connect = true;
@@ -52,21 +53,53 @@ public class HeartsServer {
                         botNum++;
                     }
                 }
-                // TODO: deal cards for round 1
-
-                for (int i = 0; i < names.length; i++) {
-                    if (names[i].contains("bot")) {
-                        String bot = names[i].replaceFirst("bot", "");
-                        bots.get(Integer.parseInt(bot)).dealCard(card);
+                Card[][] deals = dealCards();
+                for (int i = 0; i < ips.length; i++) {
+                    String msg = "deal";
+                    for (Card j : deals[i]) {
+                        msg = msg.concat(j.getNumber().toString() + ":" + j.getSuit().toString() + ":");
+                    }
+                    if (!ips[i].startsWith("bot")) {
+                        sendTo(ips[i], msg);
                     } else {
-                        sendTo(ips[i], reply);
+                        int bot = 1;
+                        // TODO: deal card to bots
                     }
                 }
             } else if (line.startsWith("card")) {       // echo message to update each client GUI
                 line = line.replaceFirst("card", "");
-                if (line.contains("card")) {
+                if (line.contains("card")) {            // handle card passing
                     // TODO: figure out to whom these passed cards go
+                } else if (currentCards[currentCards.length - 1] != null) { // if all cards are out, give a score to someone
+                    int n = 0;
+                    for (int i = 0; i < ips.length; i++) {
+                        if (Suits.valueOf(currentCards[i].split(":")[1]) == Suits.valueOf(currentCards[0].split(":")[1])) {
+                            if (Numbers.valueOf(currentCards[i].split(":")[0]).ordinal() > Numbers.valueOf(currentCards[n].split(":")[0]).ordinal()) {
+                                n = i;
+                            } else if (Numbers.valueOf(currentCards[i].split(":")[0]) == Numbers.ACE) {
+                                n = i;
+                            }
+                        }
+                    }
+                    int score = 0;
+                    for (String i : currentCards) {
+                        if (Suits.valueOf(i.split(":")[1]) == Suits.HEARTS) {
+                            score++;
+                        } else if (Numbers.valueOf(i.split(":")[0]) == Numbers.QUEEN) {
+                            if (Suits.valueOf(i.split(":")[1]) == Suits.SPADES) {
+                                score += 13;
+                            }
+                        }
+                    }
+                    scores[n] += score;
+                    reply = "hand" + names[n];
                 } else {
+                    for (int i = 0; i < currentCards.length; i++) {     // echo the card to each client
+                        if (currentCards[i] == null) {
+                            currentCards[i] = line;
+                            break;
+                        }
+                    }
                     reply = "card" + line;
                 }
             } else if (line.startsWith("end")) {
@@ -88,21 +121,24 @@ public class HeartsServer {
                             break;
                         } else {
                             // TODO: deal cards for round++
+
                         }
                     }
                 } else {                        // last round - send results
                     connect = false;
-                    reply = "results";
-                    // TODO: get everyone's scores together and concatenate onto reply
+                    reply = "";
+                    for (int i = 0; i < scores.length; i++) {
+                        reply = reply.concat("resultsp" + names[i] + ":" + scores[i]);
+                    }
                 }
             } else {
                 reply = "errorinvalidresponsefromclient";
             }
 
-            // send the action to each client
+            // send the action to every client
             if (reply != null) {
                 for (String i : ips) {
-                    if (i != null) {
+                    if (!i.contains("bot")) {
                         Socket sendTo = new Socket(i, 5544);
                         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(sendTo.getOutputStream()));
                         writer.write(reply);
@@ -112,6 +148,36 @@ public class HeartsServer {
                 }
             }
             socket.close();
+        }
+    }
+
+    private static Card[][] dealCards() {
+        Deck deck = new Deck();
+        deck.shuffle();
+        Card[][] deals = new Card[4][13];
+        String msg = "";
+        for (int i= 0; i < deck.getCards(); i++) {
+            for (int i = 0; i < names.length; i++) {
+                if (names[i].contains("bot")) {
+                    String bot = names[i].replaceFirst("bot", "");
+                    bots.get(Integer.parseInt(bot)).dealCard(deck.dealCard(), );
+                } else {
+                    msg = msg.concat("card" + deck.dealCard().toString());
+                }
+            }
+        }
+        return deals;
+    }
+
+    private static void sendTo(String ip, String msg) {
+        try {
+            Socket to = new Socket(ip, 5544);
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(to.getOutputStream()));
+            writer.write(msg);
+            writer.flush();
+            to.close();
+        } catch (java.io.IOException ex) {
+            System.out.print("Caught " + ex.toString() + " in server sentTo() to " + ip);
         }
     }
 

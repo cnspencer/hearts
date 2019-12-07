@@ -43,6 +43,7 @@ public class Hearts extends Application {
     @FXML protected Label pRight;
     @FXML protected Label pMe;
     @FXML protected Label instructionText;
+    @FXML protected Button startbt;
 
     private int padding = 15;
 
@@ -163,7 +164,7 @@ public class Hearts extends Application {
             if (line.startsWith("error")) {                         // report an error
                 this.instructionText.setText("Error: " + line.replaceFirst("error", "") + ".\nDisconnecting from server.\nPlease restart game.");
                 connected = false;
-            } else if (line.startsWith("deal")) {
+            } else if (line.startsWith("deal")) {                   // get dealt cards
                 String[] cards = line.replaceFirst("deal", "").split(":");
                 for (int i = 0; i < cards.length; i++, i++) {
                     this.me.dealCard(new Card(Numbers.valueOf(cards[i]), Suits.valueOf(cards[i++])), i);
@@ -259,7 +260,6 @@ public class Hearts extends Application {
         }
     }
 
-
     //Action methods for PlayerMenu
     @FXML private void setIPs() {
         if (this.pIP.getText().isEmpty()) {
@@ -280,26 +280,43 @@ public class Hearts extends Application {
     }
 
     //Action methods for GameWindow
+    @FXML private void ready() {
+        try {
+            Socket serv = new Socket(this.server, 5545);
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(serv.getOutputStream()));
+            writer.write("start");
+            writer.flush();
+            serv.close();
+        } catch (java.io.IOException ex) {
+            System.out.println("Caught " + ex.toString() + " sending start signal to server at " + this.server);
+        }
+    }
     @FXML private void submitTurn() {
         System.out.println("Turn processing...");
+        String msg = null;
         // find the selected card
-        Card select = null;
-        for (Card i: this.me.getHand()) {
+        Card[] select = new Card[3];
+        for (Card i : this.me.getHand()) {
             if (i.isSelected()) {
-                select = i;
-                break;
+                for (int j = 0; j < select.length; j++) {
+                    if (select[j] == null) {
+                        select[j] = i;
+                    }
+                }
             }
         }
-        if (select == null) { // no card chosen
+        if (select[0] == null) { // no card chosen
             this.instructionText.setText("Please choose a legal card.");
         } else {
+            msg = "";
             // check for legality of card selected
-            if (!select.getSuit().equals((Suits.valueOf(((ImageView)center.getChildren().get(0)).getImage().getUrl().replaceFirst(".png", "").split("of")[1])))) {
+            if (!select[0].getSuit().equals((Suits.valueOf(((ImageView)center.getChildren().get(0)).getImage().getUrl().replaceFirst(".png", "").split("of")[1])))) {
                 // card must have same suit as first card
                 for (Card i : this.me.getHand()) {
                     if (i.getSuit().equals((Suits.valueOf(((ImageView)center.getChildren().get(0)).getImage().getUrl().replaceFirst(".png", "").split("of")[1])))) {
                         // unless they have none of those cards
                         this.instructionText.setText("Please choose a legal card.");
+                        msg = null;
                         break;
                     }
                 }
@@ -309,9 +326,28 @@ public class Hearts extends Application {
                     if (i.getSuit() == Suits.CLUBS) {
                         if (!i.isSelected()) {
                             this.instructionText.setText("You must play the Two of Clubs to start the game.");
+                            msg = null;
                         }
                     }
                 }
+            }
+            if (msg != null) {
+                for (Card i : select) {
+                    if (i != null) {
+                        msg = msg.concat("card" + i.getNumber().toString() + ":" + i.getSuit());
+                    }
+                }
+            }
+        }
+        if (msg != null) {
+            try {
+                Socket serv = new Socket(this.server, 5545);
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(serv.getOutputStream()));
+                writer.write(msg);
+                writer.flush();
+                serv.close();
+            } catch (java.io.IOException ex) {
+                System.out.println("Caught " + ex.toString() + " sending " + msg + " to server at " + this.server);
             }
         }
     }
