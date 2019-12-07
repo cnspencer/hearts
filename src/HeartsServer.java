@@ -80,7 +80,18 @@ public class HeartsServer {
                         }
                         bot++;
                     }
-                    // TODO: check if a bot has the Two of Clubs, then have it take its turn
+
+                    // does a bot have the Two of Clubs
+                    for (int j = 0; j < currentCards.length; j++) {
+                        played[j] = new Card(Numbers.valueOf(currentCards[j].split(":")[0]), Suits.valueOf(currentCards[j].split(":")[1]));
+                    }
+                    int botn = 0;
+                    for (int j = 0; j < ips.length; j++) {
+                        if (bots.get(botn).getCard(Numbers.TWO, Suits.CLUBS) != null) {
+                            bots.get(botn).botTurnPlay(played);
+                        }
+                        botn++;
+                    }
                 }
             } else if (line.startsWith("card")) {       // card operations
                 line = line.replaceFirst("card", "");
@@ -90,6 +101,7 @@ public class HeartsServer {
                     for (int i = 0; i < currentCards.length; i++) {
                         if (currentCards[i] == null) {      // keep track of the played cards for the bots
                             currentCards[i] = line;
+                            break;
                         }
                     }
                     for (int i = 0; i < currentCards.length; i++) {
@@ -129,7 +141,18 @@ public class HeartsServer {
                             if (!ips[i].contains("bot")) {
                                 sendTo(ips[i], reply);
                             } else {
-                                bots.get(bot).botTurnPlay(played);
+                                Card play = bots.get(bot).botTurnPlay(played);
+                                for (String j : ips) {
+                                    if (!j.contains("bot")) {
+                                        sendTo(j, "card" + play.getNumber().toString() + ":" + play.getSuit().toString());
+                                        for (int k = 0; k < played.length; k++) {
+                                            if (played[k] == null) {
+                                                played[k] = play;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
                                 bot++;
                             }
                         }
