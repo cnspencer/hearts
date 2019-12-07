@@ -298,11 +298,10 @@ public class HeartsServer {
                     connect = false;
                     reply = "";
                     for (int i = 0; i < scores.length; i++) {
-                        reply = reply.concat("resultsp" + names[i] + ":" + scores[i]);
-                    }
-                    for (String i : ips) {
-                        if (!i.contains("bot")) {
-                            sendTo(i, reply);
+                        for (String j : ips) {
+                            if (!j.contains("bot")) {
+                                sendTo(j, "resultsp" + names[i] + ":" + scores[i]);
+                            }
                         }
                     }
                 }

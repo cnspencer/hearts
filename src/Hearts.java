@@ -30,7 +30,6 @@ public class Hearts extends Application {
     private Stage st;
 
     public void start(Stage st) {
-        connector = new Client(this.server, this.me);
         this.st = st;
         Scene playerSc = new Scene(this.getStartLoader());
         playerSc.setFill(Color.BLANCHEDALMOND);
@@ -63,15 +62,23 @@ public class Hearts extends Application {
             String playerName = this.name.getText().trim();
             this.me = new Player(playerIP, playerName);
             this.server = this.svIP.getText().trim();
+            this.connector = new Client();
+            this.connector.setPlayer(this.me);
+            this.connector.setServerIP(this.server);
             try {
+                this.st = new Stage();
                 this.st.setScene(connector.getGameLoader());
                 this.st.setTitle("Hearts Game");
                 this.st.show();
+            } catch (Exception ex) {
+                System.out.println("Caught " + ex.toString() + " initializing game and connecting to server at " + this.server);
+            }
+            try {
                 this.st.setScene(connector.connect());
                 this.st.setTitle("Results");
                 this.st.show();
             } catch (Exception ex) {
-                System.out.println("Caught " + ex.toString() + " connecting to server at " + this.server);
+                System.out.println("Caught " + ex.toString() + " displaying results");
             }
         }
     }

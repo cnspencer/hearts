@@ -18,6 +18,6 @@
         </VBox>
     </HBox>
     <VBox>
-        <Button fx:id="ipSubmit" text="Submit" alignment="CENTER" onMouseClicked="#setIPs" translateY="-60"  translateX="320"/>
+        <Button fx:id="ipSubmit" text="Submit" alignment="CENTER" onAction="#setIPs" translateY="-60"  translateX="320"/>
     </VBox>
 </VBox>

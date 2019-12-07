@@ -27,7 +27,7 @@ import java.net.Socket;
 
 public class Client {
     //Game window
-    @FXML protected HBox box;
+    @FXML protected Pane box;
     @FXML protected FlowPane center;
     @FXML protected FlowPane hand;
     @FXML protected Label pLeft;
@@ -42,12 +42,20 @@ public class Client {
     private String server;
     private Player me;
 
-    Client(String server, Player me) {
-        this.server = server;
-        this.me = me;
+    Client() {
+        this.server = "127.0.0.1";     //DEFAULT
+        this.me = new Player("127.0.0.1", "myName");   //DEFAULT
     }
 
-    protected Scene connect() throws Exception {
+    @FXML protected void setPlayer(Player p) {
+        this.me = p;
+    }
+
+    @FXML protected void setServerIP(String ip) {
+        this.server = ip;
+    }
+
+    @FXML protected Scene connect() throws Exception {
         boolean connected = true;
         while (connected) {
             String submit = null;
@@ -162,8 +170,7 @@ public class Client {
                     String name4 = p4[0];
                     int score4 = Integer.parseInt(p4[1]);
 
-                    //Show results window
-                    connected = false;
+                    //Show results window & disconnect
                     return new Scene(this.getResults(name1, score1, name2, score2, name3, score3, name4, score4), 400, 400);
                 } else if (line.startsWith("card")) {               // update center or add passed cards to hand
                     line = line.replaceFirst("card", "");
@@ -201,7 +208,7 @@ public class Client {
     }
 
     //Action methods for GameWindow
-    @FXML private void ready() {
+    @FXML protected void ready() {
         try {
             Socket serv = new Socket(this.server, 5545);
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(serv.getOutputStream()));
@@ -209,10 +216,10 @@ public class Client {
             writer.flush();
             serv.close();
         } catch (java.io.IOException ex) {
-            System.out.println("Caught " + ex.toString() + " sending start signal to server at " + this.server);
+            System.out.println("Caught \"" + ex.toString() + "\" sending start signal to server at \"" + this.server + "\"");
         }
     }
-    @FXML private void submitTurn() {
+    @FXML protected void submitTurn() {
         System.out.println("Turn processing...");
         String msg = null;
         // find the selected card
@@ -270,28 +277,29 @@ public class Client {
                 writer.flush();
                 serv.close();
             } catch (java.io.IOException ex) {
-                System.out.println("Caught " + ex.toString() + " sending " + msg + " to server at " + this.server);
+                System.out.println("Caught \"" + ex.toString() + "\" sending \"" + msg + "\" to server at \"" + this.server + "\"");
             }
         }
     }
 
-    protected Scene getGameLoader() {
+    @FXML protected Scene getGameLoader() {
         Scene sc = null;
         try {
             sc = new Scene(FXMLLoader.load(getClass().getResource("GameWindow.fxml")));
-        } catch (IOException ex) {
-            System.out.println("Caught " + ex.toString() + "in getGameLoader");
+        } catch (Exception ex) {
+            System.out.println("Caught \"" + ex.toString() + "\" in getGameLoader");
+            System.out.println(ex.getCause().toString());
         }
         //bindings
         this.pLeft.setTranslateX(this.padding);
         this.pLeft.translateYProperty().bind(this.box.heightProperty().divide(2));
-        this.pTop.translateXProperty().bind(this.box.widthProperty().divide(2).subtract(175));
+        this.pTop.translateXProperty().bind(this.box.widthProperty().divide(2));
         this.pTop.setTranslateY(this.padding);
-        this.pRight.translateXProperty().bind(this.box.widthProperty().subtract(175));
+        this.pRight.translateXProperty().bind(this.box.widthProperty().subtract(this.padding));
         this.pRight.translateYProperty().bind(this.box.heightProperty().divide(2));
-        this.center.translateXProperty().bind(this.box.widthProperty().divide(2).subtract(175));
+        this.center.translateXProperty().bind(this.box.widthProperty().divide(2));
         this.center.translateYProperty().bind(this.box.heightProperty().divide(2));
-        this.hand.translateXProperty().bind(this.box.widthProperty().divide(2).subtract(175));
+        this.hand.translateXProperty().bind(this.box.widthProperty().divide(2).subtract(this.padding));
         this.hand.translateYProperty().bind(this.box.heightProperty().add(this.padding));
         return sc;
     }
