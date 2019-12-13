@@ -42,7 +42,7 @@ public class Client {
     private String server;
     private Player me;
 
-    Client() {
+    public Client() {
         this.server = "127.0.0.1";     //DEFAULT
         this.me = new Player("127.0.0.1", "myName");   //DEFAULT
     }
@@ -288,19 +288,7 @@ public class Client {
             sc = new Scene(FXMLLoader.load(getClass().getResource("GameWindow.fxml")));
         } catch (Exception ex) {
             System.out.println("Caught \"" + ex.toString() + "\" in getGameLoader");
-            System.out.println(ex.getCause().toString());
         }
-        //bindings
-        this.pLeft.setTranslateX(this.padding);
-        this.pLeft.translateYProperty().bind(this.box.heightProperty().divide(2));
-        this.pTop.translateXProperty().bind(this.box.widthProperty().divide(2));
-        this.pTop.setTranslateY(this.padding);
-        this.pRight.translateXProperty().bind(this.box.widthProperty().subtract(this.padding));
-        this.pRight.translateYProperty().bind(this.box.heightProperty().divide(2));
-        this.center.translateXProperty().bind(this.box.widthProperty().divide(2));
-        this.center.translateYProperty().bind(this.box.heightProperty().divide(2));
-        this.hand.translateXProperty().bind(this.box.widthProperty().divide(2).subtract(this.padding));
-        this.hand.translateYProperty().bind(this.box.heightProperty().add(this.padding));
         return sc;
     }
 

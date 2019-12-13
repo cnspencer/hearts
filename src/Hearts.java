@@ -67,9 +67,10 @@ public class Hearts extends Application {
             this.connector.setServerIP(this.server);
             try {
                 this.st = new Stage();
-                this.st.setScene(connector.getGameLoader());
                 this.st.setTitle("Hearts Game");
+                this.st.setScene(connector.getGameLoader());
                 this.st.show();
+
             } catch (Exception ex) {
                 System.out.println("Caught " + ex.toString() + " initializing game and connecting to server at " + this.server);
             }
@@ -78,7 +79,7 @@ public class Hearts extends Application {
                 this.st.setTitle("Results");
                 this.st.show();
             } catch (Exception ex) {
-                System.out.println("Caught " + ex.toString() + " displaying results");
+                System.out.println("Caught " + ex.toString() + " during server connectivity");
             }
         }
     }

@@ -3,24 +3,35 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.Pane?>
 
 <HBox prefHeight="480.0" prefWidth="720.0" xmlns:fx="http://javafx.com/fxml" fx:controller="Client">
     <Pane fx:id="box">
-        <FlowPane fx:id="center" onAction=""/>
-        <Label fx:id="pLeft"/>
-        <Label fx:id="pTop"/>
-        <Label fx:id="pRight"/>
-        <Label fx:id="pMe"/>
-        <FlowPane fx:id="hand"/>
+        <FlowPane fx:id="center" translateX="${box.width}" translateY="${box.height}"/>
+        <Label fx:id="pLeft" translateX="15" translateY="${box.height}"/>
+        <Label fx:id="pTop" translateX="${box.width}" translateY="15"/>
+        <Label fx:id="pRight" translateX="${box.width}" translateY="${box.height}"/>
+        <Label fx:id="pMe" translateX="${box.width}" translateY="${box.height}"/>
+        <FlowPane fx:id="hand" translateX="${box.width}" translateY="${box.height}"/>
     </Pane>
     <VBox>
-        <Label fx:id="instructionText" alignment="CENTER" contentDisplay="CENTER" layoutX="525.0" layoutY="55.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="221.0" prefWidth="175.0" text="Welcome to Hearts! Connecting to players..." textAlignment="CENTER" wrapText="true">
-            <font><Font name="Lato Heavy" size="13.0" /></font></Label>
+        <Label fx:id="instructionText" alignment="CENTER" contentDisplay="CENTER" layoutX="525.0" layoutY="55.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="221.0" prefWidth="175.0" text="Welcome to Hearts! Connecting to players..." textAlignment="CENTER" wrapText="true"/>
         <Label text="When all players are ready, anyone may press the Start button"/>
-        <Button fx:id="startbt" onMouseClicked="#ready"/>
+        <Button fx:id="startbt" text="Start" onMouseClicked="#ready"/>
         <Button onMouseClicked="#submitTurn" text="Submit Turn" alignment="CENTER_RIGHT"/>
     </VBox>
 </HBox>
+
+<!--correctly spaced bindings for reference-->
+
+<!--this.pLeft.setTranslateX(this.padding);-->
+<!--this.pLeft.translateYProperty().bind(this.box.heightProperty().divide(2));-->
+<!--this.pTop.translateXProperty().bind(this.box.widthProperty().divide(2));-->
+<!--this.pTop.setTranslateY(this.padding);-->
+<!--this.pRight.translateXProperty().bind(this.box.widthProperty().subtract(this.padding));-->
+<!--this.pRight.translateYProperty().bind(this.box.heightProperty().divide(2));-->
+<!--this.center.translateXProperty().bind(this.box.widthProperty().divide(2));-->
+<!--this.center.translateYProperty().bind(this.box.heightProperty().divide(2));-->
+<!--this.hand.translateXProperty().bind(this.box.widthProperty().divide(2).subtract(this.padding));-->
+<!--this.hand.translateYProperty().bind(this.box.heightProperty().add(this.padding));-->
