@@ -25,7 +25,12 @@ public class HeartsServer {
             String reply = null;
             Socket socket = servSock.accept();
             BufferedReader read = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            String line = read.readLine().trim();
+            String line = "";
+            try {
+                line = read.readLine().trim();
+            } catch (NullPointerException ex) {
+                System.out.println("Caught \"" + ex.toString() + " trying to read input");
+            }
 
             if (line.startsWith("ip")) {                // set ips of players
                 for (int i = 0; i < ips.length; i++) {

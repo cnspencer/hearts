@@ -207,6 +207,30 @@ public class Client {
         return null;
     }
 
+    protected void sendIP(String ip) {
+        try {
+            Socket serv = new Socket(this.server, 5545);
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(serv.getOutputStream()));
+            writer.write("ip" + ip);
+            writer.flush();
+            serv.close();
+        } catch (java.io.IOException ex) {
+            System.out.println("Caught \"" + ex.toString() + "\" sending ip \"" + ip + "\" to server at \"" + this.server + "\"");
+        }
+    }
+
+    protected void sendName(String name) {
+        try {
+            Socket serv = new Socket(this.server, 5545);
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(serv.getOutputStream()));
+            writer.write("name" + name);
+            writer.flush();
+            serv.close();
+        } catch (java.io.IOException ex) {
+            System.out.println("Caught \"" + ex.toString() + "\" sending name \"" + name + "\" to server at \"" + this.server + "\"");
+        }
+    }
+
     //Action methods for GameWindow
     @FXML protected void ready() {
         try {

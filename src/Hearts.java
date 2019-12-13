@@ -69,8 +69,9 @@ public class Hearts extends Application {
                 this.st = new Stage();
                 this.st.setTitle("Hearts Game");
                 this.st.setScene(connector.getGameLoader());
+                this.connector.sendIP(this.me.getIP());
+                this.connector.sendName(this.me.getName());
                 this.st.show();
-
             } catch (Exception ex) {
                 System.out.println("Caught " + ex.toString() + " initializing game and connecting to server at " + this.server);
             }
