@@ -20,7 +20,7 @@
 <!--this.hand.translateXProperty().bind(this.box.widthProperty().divide(2).subtract(this.padding));-->
 <!--this.hand.translateYProperty().bind(this.box.heightProperty().add(this.padding));-->
 
-<HBox prefHeight="480.0" prefWidth="720.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.172-ea" fx:controller="Client">
+<HBox prefHeight="480.0" prefWidth="720.0" xmlns:fx="http://javafx.com/fxml" fx:controller="Client">
     <Pane fx:id="box" prefWidth="525">
         <FlowPane fx:id="center" translateX="${box.width}" translateY="${box.height}" />
         <Label fx:id="pLeft" translateX="15" translateY="${box.height}" />

@@ -211,6 +211,7 @@ public class Client {
         try {
             Socket serv = new Socket(this.server, 5545);
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(serv.getOutputStream()));
+            serv.setSoTimeout(180);
             writer.write("ip" + ip);
             writer.flush();
             serv.close();
@@ -223,6 +224,7 @@ public class Client {
         try {
             Socket serv = new Socket(this.server, 5545);
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(serv.getOutputStream()));
+            serv.setSoTimeout(180);
             writer.write("name" + name);
             writer.flush();
             serv.close();
@@ -236,6 +238,7 @@ public class Client {
         try {
             Socket serv = new Socket(this.server, 5545);
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(serv.getOutputStream()));
+            serv.setSoTimeout(180);
             writer.write("start");
             writer.flush();
             serv.close();
