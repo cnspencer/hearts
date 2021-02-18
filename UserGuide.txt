@@ -2,8 +2,8 @@ How to get the Hearts Client
 	1. Download the "Game" folder from "github.com/cnspencer/hearts".
 
 How to Run the Game
-	1. Double-click on "CS2410-Hearts".
-	2. The "Player Menu" should appear. Enter the server IP (#DEFAULTIPHERE for a dedicated server).
+	1. Double-click on "CS2410-Hearts". (Forthcoming)
+	2. The "Player Menu" should appear. Enter the server IP (#IPFORTHCOMING for a dedicated server).
 	3. Enter your IP. Enter a unique name (i.e. two or more players cannot have a name "yo"). Press "submit".
 		Players should coordinate to ensure only one player clicks the start button once everyone is ready.
 		Use numbers and/or "bot" in your player name at your own risk.
@@ -18,7 +18,7 @@ Additional Notes:
 
 How to set up a Hearts Server
 	1. Follow "How to get the Hearts Client" instructions
-	2. Double-click on "HeartsServer" (coming soon!)
+	2. Double-click on "HeartsServer" (Forthcoming)
 
 
 Hearts Game Rules
@@ -46,3 +46,7 @@ Hearts Game Rules
 	Objective
 		1. The winner has the least amount of points.
 
+
+Technical Specifications
+The server, by default, runs on port 5545.
+The client, by default, runs on port 5544.

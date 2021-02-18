@@ -17,17 +17,19 @@ public class HeartsServer {
         int[] scores = new int[4];
         Card[] played = new Card[3];
         String[] passes = new String[4];
-        ServerSocket servSock = new ServerSocket(5545);
+        ServerSocket servSock = new ServerSocket(5540);
 
         boolean connect = true;
         System.out.println("Server running on port " + servSock.getLocalPort());
         while (connect) {
             String reply = null;
             Socket socket = servSock.accept();
+            System.out.println("Client connected from " + socket.toString());
             BufferedReader read = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String line = "";
             try {
                 line = read.readLine().trim();
+                System.out.println("Received: " + line);
             } catch (NullPointerException ex) {
                 System.out.println("Caught \"" + ex.toString() + " trying to read input");
             }
@@ -343,14 +345,19 @@ public class HeartsServer {
     }
 
     private static void sendTo(String ip, String msg) {
+        int port = 5544;
         try {
-            Socket to = new Socket(ip, 5544);
+            if (ip.contains(":")) {
+                port = Integer.parseInt(ip.split(":")[1]);
+                ip = ip.split(":")[0];
+            }
+            Socket to = new Socket(ip, port);
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(to.getOutputStream()));
             writer.write(msg);
             writer.flush();
             to.close();
         } catch (java.io.IOException ex) {
-            System.out.print("Caught " + ex.toString() + " in server sentTo() to " + ip);
+            System.out.print("Caught " + ex.toString() + " in server sentTo() to " + ip + ":" + port);
         }
     }
 

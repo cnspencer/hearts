@@ -1,8 +1,7 @@
 Requirements and planning for the Hearts game itself
 -------------------------------------------------------------
 GUI components
-	###need image for cards (backside)
-
+    done
 
 Hearts
 	loads up PlayerWindow and once player has put in IPs,

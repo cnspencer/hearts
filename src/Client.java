@@ -19,6 +19,7 @@ import javafx.util.Duration;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.SQLOutput;
 
 /**
  * @author C. N. Spencer
@@ -42,6 +43,8 @@ public class Client {
     private String server;
     private Player me;
 
+    private int servPort = 5544;
+
     public Client() {
         this.server = "127.0.0.1";     //DEFAULT
         this.me = new Player("127.0.0.1", "myName");   //DEFAULT
@@ -52,14 +55,20 @@ public class Client {
     }
 
     @FXML protected void setServerIP(String ip) {
-        this.server = ip;
+        if (ip.contains(":")) {
+            this.server = ip.split(":")[0];
+            this.servPort = Integer.parseInt(ip.split(":")[1]);
+        } else {
+            this.server = ip;
+        }
     }
 
     @FXML protected Scene connect() throws Exception {
+        System.out.println("Connecting");
         boolean connected = true;
         while (connected) {
             String submit = null;
-            Socket socket = new Socket(this.server, 5545);
+            Socket socket = new Socket(this.server, servPort);
             BufferedReader read = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String line = read.readLine().trim();
 
@@ -195,7 +204,7 @@ public class Client {
                 }
                 // send the action to the server
                 if (submit != null) {
-                    ServerSocket serv = new ServerSocket(5545);
+                    ServerSocket serv = new ServerSocket(servPort);
                     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
                     writer.write(submit);
                     writer.flush();
@@ -209,7 +218,8 @@ public class Client {
 
     protected void sendIP(String ip) {
         try {
-            Socket serv = new Socket(this.server, 5545);
+            System.out.println("Sending ip");
+            Socket serv = new Socket(this.server, servPort);
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(serv.getOutputStream()));
             serv.setSoTimeout(180);
             writer.write("ip" + ip);
@@ -222,7 +232,8 @@ public class Client {
 
     protected void sendName(String name) {
         try {
-            Socket serv = new Socket(this.server, 5545);
+            System.out.println("Sending name");
+            Socket serv = new Socket(this.server, servPort);
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(serv.getOutputStream()));
             serv.setSoTimeout(180);
             writer.write("name" + name);
@@ -236,7 +247,7 @@ public class Client {
     //Action methods for GameWindow
     @FXML protected void ready() {
         try {
-            Socket serv = new Socket(this.server, 5545);
+            Socket serv = new Socket(this.server, servPort);
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(serv.getOutputStream()));
             serv.setSoTimeout(180);
             writer.write("start");
@@ -298,7 +309,7 @@ public class Client {
         }
         if (msg != null) {
             try {
-                Socket serv = new Socket(this.server, 5545);
+                Socket serv = new Socket(this.server, servPort);
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(serv.getOutputStream()));
                 writer.write(msg);
                 writer.flush();

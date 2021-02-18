@@ -10,7 +10,7 @@ public class Card {
     private Suits cardType;
     private int value;
     private Image image;
-    private Image back = new Image("/GameData/back.png");
+//    private Image back = new Image("/GameData/back.png");
     private boolean isSelected = false;
     Card(Numbers cardNum, Suits cardType) {
         this.cardNum = cardNum;
@@ -47,9 +47,9 @@ public class Card {
         }
     }
 
-    public Image showBack() {
-        return this.back;
-    }
+//    public Image showBack() {
+//        return this.back;
+//    }
 
     public Image showFront() {
         return this.image;

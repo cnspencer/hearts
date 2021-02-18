@@ -9,6 +9,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import java.io.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 /**
@@ -70,7 +72,9 @@ public class Hearts extends Application {
                 this.st.setTitle("Hearts Game");
                 this.st.setScene(connector.getGameLoader());
                 this.connector.sendIP(this.me.getIP());
+                Thread.sleep(1000);
                 this.connector.sendName(this.me.getName());
+                Thread.sleep(1000);
                 this.st.show();
             } catch (Exception ex) {
                 System.out.println("Caught " + ex.toString() + " initializing game and connecting to server at " + this.server);
@@ -85,7 +89,12 @@ public class Hearts extends Application {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
         launch(args);
+        executorService.execute(HeartsServer::new);
+        Thread.sleep(1000);
+        executorService.execute(() -> new Client());
+        Thread.sleep(1000);
     }
 }
